@@ -5,7 +5,7 @@ import {
   BarChart3, Settings, TrendingDown, Shield, Box,
   Twitter, Instagram, Linkedin, X, Loader2, CheckCircle,
   Fingerprint, Sparkles, Clock, Zap, Blocks, Link, Users,
-  Mic, Brain, Mail, UserCheck, FileText, Megaphone, Cpu, HeadphonesIcon, BatteryLow
+  Mic, Brain, Mail, UserCheck, FileText, Megaphone, Cpu, HeadphonesIcon, BatteryLow, Target, LayoutDashboard
 } from 'lucide-react';
 
 import { EtherealShadow } from './components/ui/etheral-shadow';
@@ -53,18 +53,19 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Serviços', href: '#cases' },
-    { label: 'Processo', href: '#process' },
+    { label: 'O Problema', href: '#problema' },
+    { label: 'Como Funciona', href: '#process' },
+    { label: 'Funcionalidades', href: '#features' },
+    { label: 'Planos', href: '#planos' },
     { label: 'Testemunhos', href: '#testimonials' },
-    { label: 'Contacto', href: '/contactos' },
+    { label: 'FAQs', href: '#faq' },
   ];
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#') && href !== '#') {
-      e.preventDefault();
-      const target = document.querySelector(href);
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (href === '#') return;
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
     setIsOpen(false);
   };
 
@@ -73,19 +74,14 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
       {/* Full-width fixed wrapper, navbar centered at max-w-7xl */}
       <div className="fixed top-4 left-0 right-0 z-50 px-4 flex justify-center pointer-events-none">
         <nav
-          className="w-full max-w-7xl bg-[#0a0a0a]/90 backdrop-blur-md rounded-2xl pointer-events-auto"
+          className="w-full max-w-7xl bg-background/90 backdrop-blur-md rounded-2xl pointer-events-auto"
           role="navigation"
           aria-label="Navegação principal"
         >
           <div className="px-6 h-[72px] flex items-center justify-between">
-            {/* TeaMate Logo */}
-            <a href="/" aria-label="TeaMate — página inicial" className={`flex items-center ${focusRing} rounded`}>
-              <img
-                src="/images/Logo TeamMate.svg"
-                alt="TeaMate"
-                className="h-16 w-auto"
-                draggable={false}
-              />
+            {/* RadMate Logo */}
+            <a href="/" aria-label="RadMate — página inicial" className={`flex items-center ${focusRing} rounded`}>
+              <span className="text-2xl font-bold text-primary">RadMate</span>
             </a>
 
             {/* Desktop nav links — centred */}
@@ -95,7 +91,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
                   <a
                     href={link.href}
                     onClick={(e) => handleNav(e, link.href)}
-                    className={`text-base font-display font-medium text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
+                    className={`text-base font-display font-medium text-text-muted hover:text-text-main transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
                   >
                     {link.label}
                   </a>
@@ -109,7 +105,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
                 <button
                   onClick={onOpenModal}
-                  className={`relative px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+                  className={`relative px-5 py-2.5 text-sm font-medium text-text-main bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
                 >
                   Agendar Conversa
                 </button>
@@ -118,7 +114,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 
             {/* Mobile hamburger */}
             <button
-              className={`md:hidden text-white cursor-pointer ${focusRing} rounded`}
+              className={`md:hidden text-text-main cursor-pointer ${focusRing} rounded`}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
@@ -134,7 +130,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
       {isOpen && (
         <div
           id="mobile-menu"
-          className="md:hidden fixed inset-0 z-[49] bg-[#0a0a0a] pt-[84px] px-6 pb-6 flex flex-col gap-4 mobile-menu-enter"
+          className="md:hidden fixed inset-0 z-[49] bg-background pt-[84px] px-6 pb-6 flex flex-col gap-4 mobile-menu-enter"
           role="menu"
         >
           {/* Mobile nav links */}
@@ -144,7 +140,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
               href={link.href}
               role="menuitem"
               onClick={(e) => handleNav(e, link.href)}
-              className={`text-lg font-display font-medium text-gray-300 hover:text-white py-3 border-b border-white/5 transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
+              className={`text-lg font-display font-medium text-text-muted hover:text-text-main py-3 border-b border-border transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
             >
               {link.label}
             </a>
@@ -153,7 +149,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           <div className="relative group mt-2 w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
-              className={`relative w-full px-5 py-3.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+              className={`relative w-full px-5 py-3.5 text-sm font-medium text-text-main bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
               onClick={() => { setIsOpen(false); onOpenModal(); }}
             >
               Agendar Conversa
@@ -183,9 +179,9 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
           className="text-6xl sm:text-7xl md:text-[5.5rem] font-display font-medium tracking-tight leading-[0.95] mb-8 animate-slide-up-fade"
           style={{ animationDelay: '100ms' }}
         >
-          <span className="text-gray-500 block">O futuro</span>
-          <span className="text-gray-500 block">das empresas</span>
-          <span className="text-white flex items-center justify-center flex-wrap mt-1">
+          <span className="text-text-muted/80 block">O futuro</span>
+          <span className="text-text-muted/80 block">das empresas</span>
+          <span className="text-text-main flex items-center justify-center flex-wrap mt-1">
             é
             <span className="inline-flex items-center justify-center mx-4 text-primary drop-shadow-[0_0_15px_rgba(var(--primary),0.5)]">
               <img src="/images/finger_print.svg" alt="Impressão digital" className="w-[0.8em] h-[0.8em] object-contain" />
@@ -200,7 +196,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
 
         {/* Subtext */}
         <p
-          className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl leading-relaxed animate-slide-up-fade"
+          className="text-lg md:text-xl text-text-muted mb-12 max-w-2xl leading-relaxed animate-slide-up-fade"
           style={{ animationDelay: '300ms' }}
         >
           Automatizamos os processos repetitivos da tua empresa para que a tua equipa foque no que realmente importa — crescer.
@@ -215,7 +211,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
-              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
+              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
             >
               Agendar Conversa Gratuita
             </button>
@@ -223,7 +219,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
 
           <button
             onClick={onOpenQuizModal}
-            className={`px-8 py-4 border border-white/15 hover:bg-white/5 text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+            className={`px-8 py-4 border border-border hover:bg-black/5 text-text-main font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
           >
             A IA é para mim?
           </button>
@@ -249,7 +245,7 @@ const brands = [
 ];
 
 const BrandTicker = () => (
-  <section className="py-10 border-y border-white/5 bg-white/[0.02] overflow-hidden" aria-label="Empresas parceiras">
+  <section className="py-10 border-y border-border bg-white/[0.02] overflow-hidden" aria-label="Empresas parceiras">
     <div className="marquee-wrapper">
       <div className="animate-marquee flex gap-14 items-center whitespace-nowrap" aria-hidden="true">
         {[...brands, ...brands, ...brands].map((brand, i) => (
@@ -260,7 +256,7 @@ const BrandTicker = () => (
               className="h-5 w-auto object-contain"
               draggable={false}
             />
-            <span className="font-display font-semibold text-base text-white tracking-wide">{brand.name}</span>
+            <span className="font-display font-semibold text-base text-text-main tracking-wide">{brand.name}</span>
           </div>
         ))}
       </div>
@@ -296,7 +292,7 @@ const ClockCard = () => {
 
   return (
     <div
-      className="relative col-span-1 sm:col-span-6 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-colors duration-300 text-center cursor-default"
+      className="relative col-span-1 sm:col-span-6 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -346,7 +342,7 @@ const ClockCard = () => {
       </div>
       <div className="relative z-10">
         <h3 className="text-2xl font-display font-semibold mb-3">Tempo devolvido à tua equipa</h3>
-        <p className="text-gray-400 leading-relaxed text-base">
+        <p className="text-text-muted leading-relaxed text-base">
           As tuas equipas deixam de fazer trabalho repetitivo e passam a focar no que realmente importa.
         </p>
       </div>
@@ -363,7 +359,7 @@ const HundredPercentCard = () => {
 
   return (
     <div
-      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-colors duration-300 text-center cursor-default"
+      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default"
       onMouseEnter={() => setDrawKey(k => k + 1)}
     >
       <div className="mb-8 flex items-center justify-center">
@@ -394,14 +390,14 @@ const HundredPercentCard = () => {
               strokeWidth="2"
             />
           </svg>
-          <span className="relative z-10 text-5xl font-display font-semibold text-white">
+          <span className="relative z-10 text-5xl font-display font-semibold text-text-main">
             100%
           </span>
         </div>
       </div>
       <div>
         <h3 className="text-2xl font-display font-semibold mb-3">100% personalizado ao teu negócio</h3>
-        <p className="text-gray-400 leading-relaxed text-base">
+        <p className="text-text-muted leading-relaxed text-base">
           Não adaptamos o teu negócio à ferramenta. Construímos a ferramenta à medida do teu negócio.
         </p>
       </div>
@@ -451,7 +447,7 @@ const LineChartCard = () => {
 
   return (
     <div
-      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-colors duration-300 text-center cursor-default"
+      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -526,7 +522,7 @@ const LineChartCard = () => {
       </div>
       <div>
         <h3 className="text-2xl font-display font-semibold mb-3">Resultados em semanas, não meses</h3>
-        <p className="text-gray-400 leading-relaxed text-base">
+        <p className="text-text-muted leading-relaxed text-base">
           Do briefing à automação pronta a utilizar, o nosso processo é simples, rápido e sem fricção.
         </p>
       </div>
@@ -538,7 +534,7 @@ const LineChartCard = () => {
 const Features = () => {
   const { ref, inView } = useInView();
   return (
-    <section className="py-24 px-6 relative" ref={ref}>
+    <section id="features" className="py-24 px-6 relative" ref={ref}>
       <div className="max-w-7xl mx-auto">
         <div className={`mb-16 ${inView ? 'reveal-up' : 'opacity-0'}`}>
           <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">PRINCIPAIS BENEFÍCIOS</p>
@@ -562,7 +558,7 @@ const Features = () => {
 
           {/* Card 4 — Orbital integrations */}
           <div className={`col-span-1 sm:col-span-3 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '340ms' }}>
-            <div className="relative flex flex-col md:flex-row items-center gap-8 overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-colors duration-300 group h-full">
+            <div className="relative flex flex-col md:flex-row items-center gap-8 overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 group h-full">
               <style>{`
               @keyframes orbit {
                 from { transform: rotate(0deg) translateX(110px) rotate(0deg); }
@@ -581,11 +577,11 @@ const Features = () => {
             `}</style>
 
               <div className="flex-1 z-10">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 border border-white/5 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-black/5 flex items-center justify-center mb-6 border border-border group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
                   <Blocks className="w-7 h-7 text-primary" />
                 </div>
                 <h3 className="text-2xl font-display font-semibold mb-3">Integra com o que já usas</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-text-muted leading-relaxed">
                   Gmail, Notion, HubSpot, Slack — as nossas automações encaixam no teu stack atual.
                 </p>
               </div>
@@ -595,19 +591,19 @@ const Features = () => {
                   {/* Glow — only on hover */}
                   <div className="absolute inset-0 bg-primary/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  {/* Central TeaMate favicon */}
-                  <div className="w-20 h-20 md:w-16 md:h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center z-10 shadow-xl backdrop-blur-sm group-hover:border-primary/50 transition-colors duration-500 overflow-hidden">
-                    <img src="/images/teammate_favicon_oficial.svg" alt="TeaMate" className="w-full h-full object-cover" />
+                  {/* Central RadMate favicon */}
+                  <div className="w-20 h-20 md:w-16 md:h-16 rounded-2xl bg-black/5 border border-border flex items-center justify-center z-10 shadow-xl backdrop-blur-sm group-hover:border-primary/50 transition-colors duration-500 overflow-hidden">
+                    <img src="/images/teammate_favicon_oficial.svg" alt="RadMate" className="w-full h-full object-cover" />
                   </div>
 
                   {/* Orbiting logos */}
-                  <div className="orbit-icon-1 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shadow-lg p-2">
+                  <div className="orbit-icon-1 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-black/5 border border-border flex items-center justify-center shadow-lg p-2">
                     <img src="/images/gmail_logo.svg" alt="Gmail" className="w-full h-full object-contain" />
                   </div>
                   <div className="orbit-icon-2 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-[#FF7A59]/10 border border-[#FF7A59]/30 flex items-center justify-center shadow-lg p-2">
                     <img src="/images/hubspot_icon.svg" alt="HubSpot" className="w-full h-full object-contain" />
                   </div>
-                  <div className="orbit-icon-3 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-white/5 border border-white/15 flex items-center justify-center shadow-lg p-2">
+                  <div className="orbit-icon-3 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-black/5 border border-border flex items-center justify-center shadow-lg p-2">
                     <img src="/images/notion_icon.svg" alt="Notion" className="w-full h-full object-contain" />
                   </div>
                   <div className="orbit-icon-4 absolute w-16 h-16 md:w-13 md:h-13 rounded-xl bg-[#E01E5A]/10 border border-[#E01E5A]/20 flex items-center justify-center shadow-lg p-2">
@@ -620,7 +616,7 @@ const Features = () => {
 
           {/* Card 5 — Animated bar chart */}
           <div className={`col-span-1 sm:col-span-3 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '420ms' }}>
-            <div className="relative flex flex-col md:flex-row items-center gap-8 overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-colors duration-300 group h-full">
+            <div className="relative flex flex-col md:flex-row items-center gap-8 overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 group h-full">
               <style>{`
               @keyframes bar-grow {
                 from { transform: scaleY(0.15); }
@@ -633,11 +629,11 @@ const Features = () => {
             `}</style>
 
               <div className="flex-1 z-10">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6 border border-white/5 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-black/5 flex items-center justify-center mb-6 border border-border group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
                   <Users className="w-7 h-7 text-primary" />
                 </div>
                 <h3 className="text-2xl font-display font-semibold mb-3">Escala sem contratar</h3>
-                <p className="text-gray-400 leading-relaxed">
+                <p className="text-text-muted leading-relaxed">
                   Faz o trabalho de 3 ou mais pessoas sem adicionar headcount. Cresce o volume, não os custos.
                 </p>
               </div>
@@ -702,13 +698,13 @@ const BeforeAfter = () => {
         </div>
 
         {/* Comparison Table */}
-        <div className={`relative rounded-3xl overflow-hidden border border-white/8 bg-[#0f1117] ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '150ms' }}>
+        <div className={`relative rounded-3xl overflow-hidden border border-border bg-surface-hover ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '150ms' }}>
 
           {/* Column headers */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_2px_1fr]">
             <div className="px-8 py-6 flex items-center gap-3">
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#ff4444]/15 border border-[#ff4444]/30 text-[#ff4444] font-bold text-sm">✕</span>
-              <span className="text-sm font-semibold text-[#ff4444] uppercase tracking-wider">Sem a TeamMate</span>
+              <span className="text-sm font-semibold text-[#ff4444] uppercase tracking-wider">Sem a RadMate</span>
             </div>
 
             {/* Separator — hidden on mobile, visible on md+ */}
@@ -716,7 +712,7 @@ const BeforeAfter = () => {
 
             <div className="hidden md:flex px-8 py-6 items-center gap-3">
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 border border-primary/30 text-primary font-bold text-sm">✓</span>
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Com a TeamMate</span>
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Com a RadMate</span>
             </div>
           </div>
 
@@ -724,35 +720,35 @@ const BeforeAfter = () => {
           {beforeAfterRows.map((row, i) => (
             <div
               key={i}
-              className="grid grid-cols-1 md:grid-cols-[1fr_2px_1fr] border-t border-white/5 group hover:bg-white/[0.02] transition-colors duration-300"
+              className="grid grid-cols-1 md:grid-cols-[1fr_2px_1fr] border-t border-border group hover:bg-white/[0.02] transition-colors duration-300"
             >
               {/* Left — before */}
               <div className="px-8 py-6 flex items-start gap-4">
                 <span className="mt-0.5 flex-shrink-0 text-[#ff4444] text-base">✕</span>
-                <p className="text-gray-500 text-base leading-relaxed">{row.before}</p>
+                <p className="text-text-muted/80 text-base leading-relaxed">{row.before}</p>
               </div>
 
               {/* Vertical separator — desktop only */}
-              <div className="hidden md:block w-px self-stretch bg-white/5" aria-hidden="true" />
+              <div className="hidden md:block w-px self-stretch bg-black/5" aria-hidden="true" />
 
               {/* Right — after, desktop only */}
               <div className="hidden md:flex px-8 py-6 items-start gap-4">
                 <span className="mt-0.5 flex-shrink-0 text-primary text-base">✓</span>
-                <p className="text-white text-base font-medium leading-relaxed">{row.after}</p>
+                <p className="text-text-main text-base font-medium leading-relaxed">{row.after}</p>
               </div>
             </div>
           ))}
 
-          {/* Mobile only: "Com a TeamMate" block */}
-          <div className="md:hidden border-t border-white/10">
+          {/* Mobile only: "Com a RadMate" block */}
+          <div className="md:hidden border-t border-border">
             <div className="px-8 py-6 flex items-center gap-3">
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 border border-primary/30 text-primary font-bold text-sm">✓</span>
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Com a TeamMate</span>
+              <span className="text-sm font-semibold text-primary uppercase tracking-wider">Com a RadMate</span>
             </div>
             {beforeAfterRows.map((row, i) => (
-              <div key={i} className="border-t border-white/5 px-8 py-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors duration-300">
+              <div key={i} className="border-t border-border px-8 py-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors duration-300">
                 <span className="mt-0.5 flex-shrink-0 text-primary text-base">✓</span>
-                <p className="text-white text-base font-medium leading-relaxed">{row.after}</p>
+                <p className="text-text-main text-base font-medium leading-relaxed">{row.after}</p>
               </div>
             ))}
           </div>
@@ -783,7 +779,7 @@ const About = () => {
           <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">
             RadMate — Relatórios médicos em minutos, não em horas
           </h2>
-          <p className="text-lg text-gray-400 mb-10 leading-relaxed">
+          <p className="text-lg text-text-muted mb-10 leading-relaxed">
             Os médicos passam horas por dia a documentar o que faziam em minutos. Criámos o RadMate para eliminar esse desperdício — um assistente de IA que transcreve, estrutura e gera relatórios médicos completos automaticamente, para que os médicos voltem a focar-se nos pacientes.
           </p>
 
@@ -793,7 +789,7 @@ const About = () => {
               { label: 'Menos cansaço acumulado', Icon: BatteryLow },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-4 p-4 rounded-xl bg-surface border border-border flex-1">
-                <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center border border-white/5" aria-hidden="true">
+                <div className="w-10 h-10 rounded-lg bg-black/5 flex items-center justify-center border border-border" aria-hidden="true">
                   <item.Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div>
@@ -804,9 +800,10 @@ const About = () => {
           </div>
 
           <div className="relative group inline-flex">
-            <a href="/radmate" className={`relative flex items-center justify-center px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
+            <button className={`relative px-8 py-3.5 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
               Ver Caso de Estudo
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -865,7 +862,7 @@ const Products = () => {
           <h2 className="text-4xl md:text-5xl font-display font-semibold max-w-3xl leading-tight mb-6">
             Automatizamos onde a tua empresa mais precisa
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl leading-relaxed">
+          <p className="text-lg text-text-muted max-w-2xl leading-relaxed">
             Cada empresa tem as suas próprias dores. Por isso não vendemos pacotes — identificamos os teus processos, entendemos o teu negócio e construímos a solução certa para ti.
           </p>
         </div>
@@ -875,7 +872,7 @@ const Products = () => {
           {solutionCards.map((card, i) => (
             <div
               key={i}
-              className={`group relative flex flex-col gap-5 p-8 rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 overflow-hidden ${prodInView ? 'reveal-up' : 'opacity-0'}`}
+              className={`group relative flex flex-col gap-5 p-8 rounded-3xl bg-surface border border-border hover:border-border transition-all duration-300 overflow-hidden ${prodInView ? 'reveal-up' : 'opacity-0'}`}
               style={{ animationDelay: `${i * 80}ms` }}
             >
               {/* Subtle hover glow */}
@@ -885,20 +882,20 @@ const Products = () => {
                 aria-hidden="true"
               />
               {/* Icon */}
-              <div className="relative z-10 w-12 h-12 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-center group-hover:bg-primary/15 group-hover:border-primary/30 transition-all duration-300">
+              <div className="relative z-10 w-12 h-12 rounded-2xl bg-black/5 border border-border flex items-center justify-center group-hover:bg-primary/15 group-hover:border-primary/30 transition-all duration-300">
                 <card.Icon className="w-5 h-5 text-primary" aria-hidden="true" />
               </div>
               {/* Text */}
               <div className="relative z-10 flex flex-col flex-1 gap-3">
                 <h3 className="text-xl font-display font-semibold leading-snug">{card.title}</h3>
-                <p className="text-gray-400 text-base leading-relaxed flex-1">{card.desc}</p>
+                <p className="text-text-muted text-base leading-relaxed flex-1">{card.desc}</p>
               </div>
               {/* Optional CTA */}
               {card.cta && (
                 <div className="relative z-10 mt-2">
                   <div className="relative group/btn inline-flex">
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-20 group-hover/btn:opacity-50 transition duration-500" aria-hidden="true" />
-                    <button className={`relative px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+                    <button className={`relative px-5 py-2.5 bg-primary hover:bg-primary-hover text-text-main text-sm font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
                       {card.cta}
                     </button>
                   </div>
@@ -918,14 +915,14 @@ const Products = () => {
 const TESTIMONIALS = [
   {
     id: 1,
-    quote: "Antes da TeamMate, o nosso processo de onboarding de clientes demorava 3 dias e envolvia 4 pessoas. Hoje é automático, demora 2 horas e ninguém precisa de tocar em nada. Foi a melhor decisão que tomámos este ano.",
+    quote: "Antes da RadMate, o nosso processo de onboarding de clientes demorava 3 dias e envolvia 4 pessoas. Hoje é automático, demora 2 horas e ninguém precisa de tocar em nada. Foi a melhor decisão que tomámos este ano.",
     name: "Ricardo Fernandes",
     role: "CEO, Growtify",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop",
   },
   {
     id: 2,
-    quote: "Éramos cépticos em relação à IA. Achámos que ia ser complicado, caro e que nunca ia encaixar no nosso negócio. A TeamMate provou que estávamos errados em menos de 3 semanas. A nossa equipa de vendas finalmente foca-se só em vender.",
+    quote: "Éramos cépticos em relação à IA. Achámos que ia ser complicado, caro e que nunca ia encaixar no nosso negócio. A RadMate provou que estávamos errados em menos de 3 semanas. A nossa equipa de vendas finalmente foca-se só em vender.",
     name: "Mariana Costa",
     role: "Diretora Comercial, Novalink",
     avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop",
@@ -981,18 +978,18 @@ const Testimonials = () => {
           <h2 className="text-4xl md:text-5xl font-display font-semibold leading-tight mb-4">
             Empresas que pararam de perder tempo
           </h2>
-          <p className="text-gray-400 text-lg leading-relaxed mb-16">
+          <p className="text-text-muted text-lg leading-relaxed mb-16">
             Não pedimos que confies em nós. Pedimos que ouças quem já confiou.
           </p>
           <div className="flex gap-12">
             <div>
               <p className="text-5xl font-display font-bold text-primary mb-2" aria-label="90 por cento">90%</p>
-              <p className="text-sm text-gray-500 uppercase tracking-wider mb-1">Aumento de</p>
+              <p className="text-sm text-text-muted/80 uppercase tracking-wider mb-1">Aumento de</p>
               <p className="font-medium">Eficiência Operacional</p>
             </div>
             <div>
               <p className="text-5xl font-display font-bold text-primary mb-2" aria-label="84 por cento">84%</p>
-              <p className="text-sm text-gray-500 uppercase tracking-wider mb-1">Redução de</p>
+              <p className="text-sm text-text-muted/80 uppercase tracking-wider mb-1">Redução de</p>
               <p className="font-medium">Custos Manuais</p>
             </div>
           </div>
@@ -1036,21 +1033,21 @@ const Testimonials = () => {
                     onDragEnd={handleDragEnd}
                     className="absolute w-full"
                   >
-                    <div className="relative bg-[#111318] border border-white/10 rounded-2xl p-8 shadow-2xl" style={{ cursor: position === 0 ? 'grab' : 'default' }}>
+                    <div className="relative bg-surface border border-border rounded-2xl p-8 shadow-2xl" style={{ cursor: position === 0 ? 'grab' : 'default' }}>
                       {/* Arrows inside front card only */}
                       {position === 0 && (
                         <>
                           <button
                             onClick={(e) => { e.stopPropagation(); resetAuto(); prev(); }}
                             aria-label="Testemunho anterior"
-                            className={`absolute top-4 left-4 z-10 w-8 h-8 flex items-center justify-center rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all duration-200 cursor-pointer text-lg ${focusRing}`}
+                            className={`absolute top-4 left-4 z-10 w-8 h-8 flex items-center justify-center rounded-full text-text-main/40 hover:text-text-main hover:bg-black/5 transition-all duration-200 cursor-pointer text-lg ${focusRing}`}
                           >
                             ←
                           </button>
                           <button
                             onClick={(e) => { e.stopPropagation(); resetAuto(); next(); }}
                             aria-label="Próximo testemunho"
-                            className={`absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all duration-200 cursor-pointer text-lg ${focusRing}`}
+                            className={`absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full text-text-main/40 hover:text-text-main hover:bg-black/5 transition-all duration-200 cursor-pointer text-lg ${focusRing}`}
                           >
                             →
                           </button>
@@ -1060,13 +1057,13 @@ const Testimonials = () => {
                         <img
                           src={t.avatar}
                           alt={`Foto de ${t.name}`}
-                          className="w-16 h-16 rounded-full object-cover border-2 border-white/10 flex-shrink-0"
+                          className="w-16 h-16 rounded-full object-cover border-2 border-border flex-shrink-0"
                         />
                         <div className="space-y-2">
-                          <h3 className="text-lg font-display font-semibold text-white">{t.name}</h3>
+                          <h3 className="text-lg font-display font-semibold text-text-main">{t.name}</h3>
                           <p className="text-primary text-xs font-medium uppercase tracking-wider">{t.role}</p>
                         </div>
-                        <p className="text-gray-300 text-base leading-relaxed italic max-w-sm">
+                        <p className="text-text-muted text-base leading-relaxed italic max-w-sm">
                           &ldquo;{t.quote}&rdquo;
                         </p>
                       </div>
@@ -1090,7 +1087,7 @@ const Testimonials = () => {
                   setCurrentIndex(i);
                   resetAuto();
                 }}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === currentIndex ? 'bg-primary w-5' : 'bg-white/20 w-2 hover:bg-white/40'}`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === currentIndex ? 'bg-primary w-5' : 'bg-black/5 w-2 hover:bg-black/5'}`}
               />
             ))}
           </div>
@@ -1108,7 +1105,7 @@ const StatCard: React.FC<StatCardProps> = ({ num, prefix = '', suffix, title, de
   const count = useCountUp(num, 1800, start);
   return (
     <div
-      className="group relative p-8 rounded-2xl bg-[#111318] border border-white/8 flex flex-col gap-0 overflow-hidden transition-all duration-500 hover:border-white/15 h-full w-full"
+      className="group relative p-8 rounded-2xl bg-surface border border-border flex flex-col gap-0 overflow-hidden transition-all duration-500 hover:border-border h-full w-full"
       style={{ isolation: 'isolate' }}
     >
       {/* Blue hover glow */}
@@ -1129,10 +1126,10 @@ const StatCard: React.FC<StatCardProps> = ({ num, prefix = '', suffix, title, de
       </p>
 
       {/* Title */}
-      <h3 className="text-xl font-display font-bold text-white leading-snug mb-3">{title}</h3>
+      <h3 className="text-xl font-display font-bold text-text-main leading-snug mb-3">{title}</h3>
 
       {/* Description */}
-      <p className="text-gray-400 text-base leading-relaxed flex-1">{desc}</p>
+      <p className="text-text-muted text-base leading-relaxed flex-1">{desc}</p>
     </div>
   );
 };
@@ -1154,7 +1151,7 @@ const Statistics = () => {
     { num: 80, prefix: '', suffix: '%', title: 'Redução de Tarefas Manuais', desc: '"Em média, as equipas dos nossos clientes eliminam 80% das tarefas repetitivas no primeiro mês."' },
     { num: 3, prefix: '', suffix: 'x', title: 'Mais Velocidade Operacional', desc: '"Os processos que demoravam dias passam a ser concluídos em horas — sem erros e sem intervenção humana."' },
     { num: 200, prefix: '+', suffix: 'h', title: 'Poupadas por Mês', desc: '"São mais de 200 horas mensais devolvidas às equipas para focar no que realmente faz crescer o negócio."' },
-    { num: 97, prefix: '', suffix: '%', title: 'Taxa de Satisfação', desc: '"97% dos nossos clientes recomendam a TeamMate após os primeiros 60 dias de automação."' },
+    { num: 97, prefix: '', suffix: '%', title: 'Taxa de Satisfação', desc: '"97% dos nossos clientes recomendam a RadMate após os primeiros 60 dias de automação."' },
   ];
 
   return (
@@ -1182,10 +1179,9 @@ const Statistics = () => {
 
 /* ─── Process ────────────────────────────────────────── */
 const processSteps = [
-  { step: 1, title: 'Diagnóstico', desc: 'Começamos por ouvir. Analisamos o teu negócio, mapeamos os processos que consomem mais tempo e identificamos exatamente onde a automação vai ter maior impacto.', align: 'left', img: '/images/diagnostico_processo.webp', alt: 'Diagrama da fase de diagnóstico e mapeamento de processos' },
-  { step: 2, title: 'Estratégia', desc: 'Com base no diagnóstico, desenhamos um plano personalizado. Nada genérico — cada solução é pensada especificamente para o teu negócio, a tua equipa e as tuas ferramentas.', align: 'right', img: '/images/estrategia_processo.webp', alt: 'Interface de planeamento estratégico personalizado' },
-  { step: 3, title: 'Desenvolvimento', desc: 'Construímos as automações e agentes de IA do zero, com acompanhamento total. Tu tens visibilidade sobre tudo o que está a ser criado, em tempo real.', align: 'left', img: '/images/desenvolvimento_processo.webp', alt: 'Ambiente de desenvolvimento de automações e agentes de IA' },
-  { step: 4, title: 'Lançamento', desc: 'Lançamos as soluções, garantimos que tudo funciona como esperado e ficamos contigo. O teu crescimento é o nosso trabalho, não só na entrega — mas depois dela.', align: 'right', img: '/images/lancamanento_processo.webp', alt: 'Dashboard de lançamento e monitorização de soluções' },
+  { step: 1, title: 'Grava ou Importa', desc: 'Utiliza a tua voz para descrever o exame ou importa um áudio já existente. O RadMate transcreve tudo automaticamente com precisão clínica.', align: 'left', img: '/images/diagnostico_processo.webp', alt: 'Fase de gravação ou importação de áudio' },
+  { step: 2, title: 'A IA Constrói o Relatório', desc: 'Com base na transcrição e no template escolhido por ti, o RadMate gera automaticamente um relatório estruturado, completo e pronto a rever.', align: 'right', img: '/images/estrategia_processo.webp', alt: 'A IA a construir o relatório médico' },
+  { step: 3, title: 'Verifica e Exporta', desc: 'Revê o relatório gerado, confirma a consistência com o áudio original e exporta com um clique. Rápido, preciso e sem complicações.', align: 'left', img: '/images/desenvolvimento_processo.webp', alt: 'Revisão e exportação do relatório final' },
 ];
 
 const Process = () => {
@@ -1217,9 +1213,9 @@ const Process = () => {
     <section id="process" className="py-24 px-6 overflow-hidden" ref={viewRef}>
       <div className="max-w-7xl mx-auto">
         <div className={`text-center mb-20 ${inView ? 'reveal-up' : 'opacity-0'}`}>
-          <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">O NOSSO PROCESSO</p>
+          <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">COMO FUNCIONA</p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold max-w-2xl mx-auto leading-tight">
-            Do problema à solução, em 4 passos
+            Do áudio ao relatório final, em 3 passos
           </h2>
         </div>
 
@@ -1240,7 +1236,7 @@ const Process = () => {
               {/* Text side */}
               <div className={`flex-1 ${p.align === 'right' ? 'text-left' : 'text-right'}`}>
                 <h3 className="text-3xl md:text-4xl font-display font-semibold mb-4">{p.title}</h3>
-                <p className="text-gray-400 text-lg leading-relaxed max-w-md ml-auto mr-auto md:mx-0">{p.desc}</p>
+                <p className="text-text-muted text-lg leading-relaxed max-w-md ml-auto mr-auto md:mx-0">{p.desc}</p>
               </div>
               {/* Circle */}
               <div
@@ -1284,7 +1280,7 @@ const Process = () => {
               {/* Content on the right */}
               <div className="flex-1 pt-1">
                 <h3 className="text-2xl font-display font-semibold mb-3">{p.title}</h3>
-                <p className="text-gray-400 text-base leading-relaxed mb-5">{p.desc}</p>
+                <p className="text-text-muted text-base leading-relaxed mb-5">{p.desc}</p>
                 <div className="aspect-[4/3] rounded-2xl bg-surface border border-border overflow-hidden">
                   <img
                     src={p.img}
@@ -1307,10 +1303,10 @@ const Process = () => {
 /* ─── FAQ ────────────────────────────────────────────── */
 const faqs = [
   { q: 'Quanto tempo demora a implementação?', a: 'Entre 1 a 4 semanas, dependendo da complexidade. Automações simples ficam prontas em poucos dias.' },
-  { q: 'A TeamMate integra-se às nossas ferramentas existentes?', a: 'Sim. Trabalhamos com CRMs, ERPs, e-mail marketing, redes sociais e muito mais. Adaptamo-nos ao teu stack, não o contrário.' },
-  { q: 'A TeamMate consegue acompanhar o crescimento da empresa?', a: 'Sempre. As nossas soluções são construídas para escalar — mais volume, mais processos, sem precisar de contratar mais ninguém.' },
+  { q: 'A RadMate integra-se às nossas ferramentas existentes?', a: 'Sim. Trabalhamos com CRMs, ERPs, e-mail marketing, redes sociais e muito mais. Adaptamo-nos ao teu stack, não o contrário.' },
+  { q: 'A RadMate consegue acompanhar o crescimento da empresa?', a: 'Sempre. As nossas soluções são construídas para escalar — mais volume, mais processos, sem precisar de contratar mais ninguém.' },
   { q: 'Que tipo de suporte está disponível após o lançamento?', a: 'Suporte contínuo com monitorização, ajustes e formação para a tua equipa tirar o máximo das automações.' },
-  { q: 'A TeamMate é segura e competente?', a: 'Sim. Seguimos as normas RGPD, usamos integrações testadas e entregamos resultados reais — não promessas.' },
+  { q: 'A RadMate é segura e competente?', a: 'Sim. Seguimos as normas RGPD, usamos integrações testadas e entregamos resultados reais — não promessas.' },
 ];
 
 const FAQ = () => {
@@ -1327,19 +1323,19 @@ const FAQ = () => {
         <div className={`lg:col-span-5 ${inView ? 'reveal-up' : 'opacity-0'}`}>
           <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">FAQs</p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">Perguntas Frequentes</h2>
-          <p className="text-gray-400 text-lg mb-10 leading-relaxed">
+          <p className="text-text-muted text-lg mb-10 leading-relaxed">
             Tens dúvidas sobre como a IA pode transformar o teu negócio? Encontre as respostas abaixo ou contacta-nos diretamente.
           </p>
-          <a href="/contactos" className={`inline-block px-6 py-2.5 border border-white/15 hover:bg-white/5 text-white rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+          <button className={`px-6 py-2.5 border border-border hover:bg-black/5 text-text-main rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
             Faz a tua Pergunta
-          </a>
+          </button>
         </div>
 
         <div className="lg:col-span-7 flex flex-col gap-4" role="list">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className={`rounded-2xl bg-surface border border-border hover:border-white/20 transition-colors duration-200 overflow-hidden ${inView ? 'reveal-up' : 'opacity-0'}`}
+              className={`rounded-2xl bg-surface border border-border hover:border-border transition-colors duration-200 overflow-hidden ${inView ? 'reveal-up' : 'opacity-0'}`}
               style={{ animationDelay: `${i * 100 + 200}ms` }}
               role="listitem"
             >
@@ -1351,7 +1347,7 @@ const FAQ = () => {
                 id={`faq-question-${i}`}
               >
                 <span className="text-lg font-medium pr-4">{faq.q}</span>
-                <div className={`w-8 h-8 rounded-full bg-white/5 flex items-center justify-center transition-transform duration-300 flex-shrink-0 ${openIndex === i ? 'rotate-180' : ''}`} aria-hidden="true">
+                <div className={`w-8 h-8 rounded-full bg-black/5 flex items-center justify-center transition-transform duration-300 flex-shrink-0 ${openIndex === i ? 'rotate-180' : ''}`} aria-hidden="true">
                   <ChevronDown className="w-4 h-4" />
                 </div>
               </button>
@@ -1362,7 +1358,7 @@ const FAQ = () => {
                 className={`faq-answer ${openIndex === i ? 'open' : ''}`}
               >
                 <div>
-                  <p className="px-6 pb-6 text-gray-400 leading-relaxed">{faq.a}</p>
+                  <p className="px-6 pb-6 text-text-muted leading-relaxed">{faq.a}</p>
                 </div>
               </div>
             </div>
@@ -1378,7 +1374,7 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const { ref, inView } = useInView();
   return (
     <section className="py-24 px-6 bg-surface/30" ref={ref}>
-      <div className="max-w-5xl mx-auto relative rounded-[3rem] overflow-hidden border border-border bg-[#0a0a0a]">
+      <div className="max-w-5xl mx-auto relative rounded-[3rem] overflow-hidden border border-border bg-background">
         {/* Animated EtherealShadow background — same as Hero */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60" aria-hidden="true">
           <EtherealShadow
@@ -1391,14 +1387,14 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
           <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6 leading-tight max-w-2xl mx-auto">
             A tua equipa merece trabalhar menos no que não importa
           </h2>
-          <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
+          <p className="text-lg text-text-muted mb-10 max-w-xl mx-auto leading-relaxed">
             Marca uma call gratuita e mostramos-te exatamente onde a automação pode transformar o teu negócio — sem compromisso, sem complicações.
           </p>
           <div className="relative group inline-flex justify-center mt-4">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
-              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 text-lg cursor-pointer border border-transparent ${focusRing}`}
+              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 text-lg cursor-pointer border border-transparent ${focusRing}`}
             >
               Quero a minha Call Gratuita
             </button>
@@ -1421,7 +1417,7 @@ const Footer = () => {
     {
       title: 'Navegação',
       links: [
-        { label: 'Serviços', href: '#cases' },
+        { label: 'O Problema', href: '#problema' },
         { label: 'Processo', href: '#process' },
         { label: 'Testemunhos', href: '#testimonials' },
       ],
@@ -1429,9 +1425,9 @@ const Footer = () => {
     {
       title: 'Empresa',
       links: [
+        { label: 'Planos', href: '#planos' },
         { label: 'FAQs', href: '#faq' },
-        { label: 'Contacto', href: '/contactos' },
-        { label: 'RadMate', href: '/radmate' },
+        { label: 'Contacto', href: '#' },
       ],
     },
     {
@@ -1450,14 +1446,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
           <div className="lg:col-span-4">
             <div className="mb-6">
-              <img
-                src="/images/Logo TeamMate.svg"
-                alt="TeamMate"
-                className="h-14 w-auto"
-                draggable={false}
-              />
+              <span className="text-2xl font-bold text-primary">RadMate</span>
             </div>
-            <p className="text-gray-400 leading-relaxed max-w-sm">
+            <p className="text-text-muted leading-relaxed max-w-sm">
               Menos trabalho repetitivo. Mais tempo para crescer.
             </p>
           </div>
@@ -1466,13 +1457,13 @@ const Footer = () => {
             {footerCols.map((col) => (
               <div key={col.title}>
                 <h3 className="font-display font-semibold mb-6">{col.title}</h3>
-                <div className="flex flex-col gap-4 text-gray-400">
+                <div className="flex flex-col gap-4 text-text-muted">
                   {col.links.map((link) => (
                     <a
                       key={link.label}
                       href={link.href}
                       onClick={(e) => { if (link.href.startsWith('#') && link.href !== '#') { e.preventDefault(); scrollTo(link.href); } }}
-                      className={`hover:text-white transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
+                      className={`hover:text-text-main transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
                     >
                       {link.label}
                     </a>
@@ -1486,22 +1477,22 @@ const Footer = () => {
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex gap-4">
             {/* TikTok */}
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir TeamMate no TikTok">
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-black/5 border border-border flex items-center justify-center hover:bg-black/5 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir RadMate no TikTok">
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.02-.06Z" />
               </svg>
             </a>
             {/* Instagram */}
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir TeamMate no Instagram">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-black/5 border border-border flex items-center justify-center hover:bg-black/5 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir RadMate no Instagram">
               <Instagram className="w-4 h-4" aria-hidden="true" />
             </a>
             {/* LinkedIn */}
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir TeamMate no LinkedIn">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-black/5 border border-border flex items-center justify-center hover:bg-black/5 transition-colors duration-200 cursor-pointer ${focusRing}`} aria-label="Seguir RadMate no LinkedIn">
               <Linkedin className="w-4 h-4" aria-hidden="true" />
             </a>
           </div>
-          <p className="text-sm text-gray-500 font-display">
-            © TeamMate {new Date().getFullYear()} — Todos os direitos reservados.
+          <p className="text-sm text-text-muted/80 font-display">
+            © RadMate {new Date().getFullYear()} — Todos os direitos reservados.
           </p>
         </div>
       </div>
@@ -1509,28 +1500,151 @@ const Footer = () => {
   );
 };
 
+/* ─── Problem ────────────────────────────────────────── */
+const Problem = () => {
+  const { ref, inView } = useInView();
+  return (
+    <section id="problema" className="py-24 px-6 bg-background" ref={ref}>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className={inView ? 'reveal-up' : 'opacity-0'}>
+          <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight text-text-main">
+            O problema que resolvemos
+          </h2>
+          <p className="text-lg text-text-muted leading-relaxed">
+            Os radiologistas passam horas por dia a documentar o que fizeram em minutos. Tempo que devia ser dedicado aos doentes é consumido por relatórios intermináveis, digitação manual e revisões constantes.
+          </p>
+        </div>
+        <div className="flex flex-col gap-6">
+          {[
+            { Icon: Clock, title: 'Tempo Desperdiçado', desc: 'Horas do teu dia gastas a escrever relatórios que a IA pode gerar em segundos.' },
+            { Icon: Target, title: 'Erros e Inconsistências', desc: 'A digitação manual introduz erros que comprometem a qualidade e consistência dos teus relatórios.' },
+            { Icon: BatteryLow, title: 'Esgotamento Profissional', desc: 'O trabalho administrativo repetitivo retira foco e energia ao que realmente importa — os teus pacientes.' }
+          ].map((item, i) => (
+            <div key={i} className={`p-6 rounded-2xl bg-surface-hover border border-border flex items-start gap-4 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 100}ms` }}>
+              <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-black/5 border border-border flex items-center justify-center">
+                <item.Icon className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-xl font-display font-semibold text-text-main mb-2">{item.title}</h3>
+                <p className="text-text-muted text-base">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Visual Demo ────────────────────────────────────── */
+const VisualDemo = () => {
+  const { ref, inView } = useInView();
+  return (
+    <section id="demo" className="py-24 px-6 bg-surface-hover" ref={ref}>
+      <div className="max-w-6xl mx-auto">
+        <div className={`w-full aspect-[2/1] bg-border/50 rounded-3xl border border-border flex items-center justify-center shadow-lg relative overflow-hidden mb-12 ${inView ? 'reveal-up' : 'opacity-0'}`}>
+          <div className="absolute top-0 left-0 right-0 h-10 bg-surface border-b border-border flex items-center px-4 gap-2">
+            <div className="w-3 h-3 rounded-full bg-red-400"></div>
+            <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+            <div className="w-3 h-3 rounded-full bg-green-400"></div>
+          </div>
+          <p className="text-text-muted text-xl font-medium mt-10">Demo do Software</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center px-4">
+          {[
+            { Icon: Zap, text: 'Geração Instantânea' },
+            { Icon: Shield, text: '100% Seguro e Privado' },
+            { Icon: LayoutDashboard, text: 'Interface Intuitiva' }
+          ].map((item, i) => (
+            <div key={i} className={`flex flex-col items-center gap-3 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150}ms` }}>
+              <item.Icon className="w-8 h-8 text-primary" />
+              <p className="font-medium text-text-main">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ─── Pricing ────────────────────────────────────────── */
+const Pricing = () => {
+  const { ref, inView } = useInView();
+  const plans = [
+    { name: 'Base', price: '€299', desc: 'Para pequenas equipas', features: ['Até 5 utilizadores', 'Suporte email', 'Funcionalidades base'] },
+    { name: 'Pro', price: '€599', desc: 'O mais escolhido', features: ['Até 20 utilizadores', 'Suporte prioritário', 'Automações avançadas', 'Integrações custom'], popular: true },
+    { name: 'Enterprise', price: 'Sob consulta', desc: 'Para escalar rápido', features: ['Utilizadores ilimitados', 'Suporte 24/7', 'Infraestrutura dedicada', 'SLA garantido'] }
+  ];
+
+  return (
+    <section id="planos" className="py-24 px-6 bg-background" ref={ref}>
+      <div className="max-w-7xl mx-auto">
+        <div className={`text-center mb-16 ${inView ? 'reveal-up' : 'opacity-0'}`}>
+          <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight text-text-main">
+            Planos simples e transparentes
+          </h2>
+          <p className="text-lg text-text-muted max-w-2xl mx-auto">
+            Escolhe o plano que se adapta ao momento da tua empresa.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+          {plans.map((plan, i) => (
+            <div key={i} className={`relative p-8 rounded-3xl bg-surface border ${plan.popular ? 'border-primary shadow-xl scale-105 z-10' : 'border-border'} flex flex-col ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150}ms` }}>
+              {plan.popular && (
+                <span className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold uppercase tracking-wider py-1.5 px-4 rounded-full">
+                  Mais Popular
+                </span>
+              )}
+              <div className="mb-6 mt-4">
+                <h3 className="text-2xl font-display font-bold text-text-main mb-2">{plan.name}</h3>
+                <p className="text-text-muted text-sm">{plan.desc}</p>
+              </div>
+              <div className="mb-8">
+                <span className="text-4xl font-bold text-text-main">{plan.price}</span>
+                {plan.price !== 'Sob consulta' && <span className="text-text-muted">/mês</span>}
+              </div>
+              <ul className="mb-8 flex-1 space-y-4">
+                {plan.features.map((feat, j) => (
+                  <li key={j} className="flex items-center gap-3">
+                    <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                    <span className="text-text-muted">{feat}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="relative group/btn mt-auto">
+                <div className={`absolute -inset-1 rounded-xl blur opacity-25 group-hover/btn:opacity-60 transition duration-500 ${plan.popular ? 'bg-gradient-to-r from-blue-600/50 to-blue-400/50' : ''}`} aria-hidden="true"></div>
+                <button className={`relative w-full py-3.5 rounded-xl font-medium transition-colors ${plan.popular ? 'bg-primary text-white hover:bg-primary-hover border border-transparent' : 'bg-transparent text-text-main border border-border hover:bg-black/5'}`}>
+                  Escolher Plano
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 /* ─── App ────────────────────────────────────────────── */
-export default function App() {
+export default function RadMate() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-primary/30">
+    <div className="radmate-theme min-h-screen bg-background text-text-main selection:bg-primary/30">
       <Navbar onOpenModal={() => setIsModalOpen(true)} />
       <main>
         <Hero
           onOpenModal={() => setIsModalOpen(true)}
           onOpenQuizModal={() => setIsQuizModalOpen(true)}
         />
-        <BrandTicker />
-        <Features />
-        <BeforeAfter />
-        <Testimonials />
-        <About />
-        <Products />
+        <Problem />
         <Process />
-        <Statistics />
-
+        <Features />
+        <VisualDemo />
+        <Pricing />
+        <Testimonials />
         <FAQ />
         <CTA onOpenModal={() => setIsModalOpen(true)} />
       </main>

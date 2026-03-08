@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 76" fill="none" role="img" aria-label="TeaMate">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@800&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- "tea" in teal -->
+  <text
+    x="2"
+    y="58"
+    font-family="'Nunito', 'Poppins', 'Arial Rounded MT Bold', Arial, sans-serif"
+    font-size="56"
+    font-weight="800"
+    fill="#1A6F8A"
+  >tea</text>
+
+  <!-- Custom "M" glyph with owl eyes — positioned after "tea" (~122px) -->
+  <g transform="translate(125, 6)">
+    <!-- M outline shape in orange -->
+    <path d="M0,0 L0,50 L8,50 L8,24 L22,42 L36,24 L36,50 L44,50 L44,0 L36,0 L22,16 L8,0 Z" fill="#E8732A"/>
+
+    <!-- Left eye white -->
+    <circle cx="9.5" cy="36" r="7.5" fill="white"/>
+    <!-- Left eye pupil (blue) -->
+    <circle cx="9.5" cy="36" r="3.8" fill="#1A6F8A"/>
+    <!-- Left eye highlight -->
+    <circle cx="11.2" cy="34.2" r="1.3" fill="white" opacity="0.9"/>
+
+    <!-- Right eye white -->
+    <circle cx="34.5" cy="36" r="7.5" fill="white"/>
+    <!-- Right eye pupil (blue) -->
+    <circle cx="34.5" cy="36" r="3.8" fill="#1A6F8A"/>
+    <!-- Right eye highlight -->
+    <circle cx="36.2" cy="34.2" r="1.3" fill="white" opacity="0.9"/>
+
+    <!-- Smile arc -->
+    <path d="M9,50 Q22,63 35,50" stroke="#E8732A" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <!-- "ate" in teal — positioned after the M glyph (~125 + 44 + 4 = 173px) -->
+  <text
+    x="173"
+    y="58"
+    font-family="'Nunito', 'Poppins', 'Arial Rounded MT Bold', Arial, sans-serif"
+    font-size="56"
+    font-weight="800"
+    fill="#1A6F8A"
+  >ate</text>
+</svg>

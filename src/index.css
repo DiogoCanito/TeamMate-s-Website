@@ -14,6 +14,18 @@
   --color-border: #262626;
 }
 
+.radmate-theme {
+  --color-background: #F8F9FA;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f1f3f5;
+  --color-primary: #06658d;
+  --color-primary-hover: #055070;
+  --color-text-main: #1a1a2e;
+  --color-text-muted: #475569;
+  --color-border: #e2e8f0;
+}
+
+/* ─── Base ─────────────────────────────────────────── */
 body {
   background-color: var(--color-background);
   color: var(--color-text-main);
@@ -21,10 +33,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
   font-family: var(--font-display);
 }
 
+/* ─── Focus styles (WCAG keyboard nav) ─────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Hero glow background ──────────────────────────── */
 .glow-bg {
   position: absolute;
   top: 0;
@@ -37,13 +63,151 @@ h1, h2, h3, h4, h5, h6 {
   z-index: -1;
 }
 
+/* ─── Brand Ticker / Marquee ────────────────────────── */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
 }
 
 .animate-marquee {
   display: flex;
   width: max-content;
   animation: marquee 30s linear infinite;
+}
+
+/* Pause on hover for better UX */
+.marquee-wrapper:hover .animate-marquee {
+  animation-play-state: paused;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* ─── Scroll reveal animations ──────────────────────── */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-up {
+  opacity: 0;
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.reveal-fade {
+  opacity: 0;
+  animation: revealFade 0.55s ease forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .reveal-up,
+  .reveal-fade {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ─── Scrollbar hide utility ─────────────────────────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── FAQ accordion smooth transition ───────────────── */
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease-out;
+}
+
+.faq-answer.open {
+  grid-template-rows: 1fr;
+}
+
+.faq-answer>div {
+  overflow: hidden;
+}
+
+/* ─── Mobile menu slide-down animation ──────────────── */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-menu-enter {
+  animation: slideDown 200ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-enter {
+    animation: none;
+  }
+}
+
+/* ─── Slide up fade animation ───────────────────────── */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up-fade {
+  opacity: 0;
+  animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-up-fade {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* ─── Stat counter ──────────────────────────────────── */
+.stat-number {
+  font-variant-numeric: tabular-nums;
 }
