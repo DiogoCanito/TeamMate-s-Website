@@ -83,7 +83,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
               <img
                 src="/images/Logo TeamMate.svg"
                 alt="TeaMate"
-                className="h-16 w-auto"
+                className="h-14 md:h-16 w-auto"
                 draggable={false}
               />
             </a>
@@ -118,13 +118,35 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 
             {/* Mobile hamburger */}
             <button
-              className={`md:hidden text-white cursor-pointer ${focusRing} rounded`}
+              className={`flex items-center justify-center w-10 h-10 md:hidden text-white cursor-pointer ${focusRing} rounded`}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
             >
-              {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+              <AnimatePresence mode="wait" initial={false}>
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" aria-hidden="true" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" aria-hidden="true" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </nav>
@@ -180,7 +202,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
 
         {/* Main Text */}
         <h1
-          className="text-6xl sm:text-7xl md:text-[5.5rem] font-display font-medium tracking-tight leading-[0.95] mb-8 animate-slide-up-fade"
+          className="text-5xl sm:text-6xl md:text-[5.5rem] font-display font-medium tracking-tight leading-[0.95] mb-8 animate-slide-up-fade"
           style={{ animationDelay: '100ms' }}
         >
           <span className="text-gray-500 block">O futuro</span>
@@ -212,10 +234,10 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
           style={{ animationDelay: '500ms' }}
         >
           <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 group-active:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
-              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
+              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover active:scale-95 md:active:scale-100 text-white font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
             >
               Agendar Conversa Gratuita
             </button>
@@ -223,7 +245,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
 
           <button
             onClick={onOpenQuizModal}
-            className={`px-8 py-4 border border-white/15 hover:bg-white/5 text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+            className={`px-8 py-4 border border-white/15 hover:bg-white/5 active:bg-white/5 active:scale-95 md:active:scale-100 text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
           >
             A IA é para mim?
           </button>
