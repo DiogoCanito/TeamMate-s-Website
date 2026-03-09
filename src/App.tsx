@@ -191,12 +191,14 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpenQuizModal: () => void }) => {
   return (
     <section className="relative pt-32 md:pt-40 pb-24 px-6 overflow-hidden flex flex-col items-center justify-center min-h-[85vh]">
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
-        <EtherealShadow
-          color="rgba(5, 102, 141, 0.7)"
-          animation={{ scale: 100, speed: 60 }}
-          noise={{ opacity: 0.6, scale: 1.5 }}
-        />
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-50 flex items-center justify-center">
+        <div className="w-[300%] h-[150%] md:w-full md:h-full flex-shrink-0">
+          <EtherealShadow
+            color="rgba(5, 102, 141, 0.7)"
+            animation={{ scale: 100, speed: 60 }}
+            noise={{ opacity: 0.6, scale: 1.5 }}
+          />
+        </div>
       </div>
       <div className="max-w-4xl mx-auto w-full flex flex-col items-center text-center z-10">
 
@@ -728,7 +730,7 @@ const BeforeAfter = () => {
 
           {/* Column headers */}
           <div className="grid grid-cols-1 md:grid-cols-[1fr_2px_1fr]">
-            <div className="px-8 py-6 flex items-center gap-3">
+            <div className="px-4 md:px-8 py-6 flex items-center gap-3">
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-[#ff4444]/15 border border-[#ff4444]/30 text-[#ff4444] font-bold text-sm">✕</span>
               <span className="text-sm font-semibold text-[#ff4444] uppercase tracking-wider">Sem a TeamMate</span>
             </div>
@@ -749,7 +751,7 @@ const BeforeAfter = () => {
               className="grid grid-cols-1 md:grid-cols-[1fr_2px_1fr] border-t border-white/5 group hover:bg-white/[0.02] transition-colors duration-300"
             >
               {/* Left — before */}
-              <div className="px-8 py-6 flex items-start gap-4">
+              <div className="px-4 md:px-8 py-6 flex items-start gap-4">
                 <span className="mt-0.5 flex-shrink-0 text-[#ff4444] text-base">✕</span>
                 <p className="text-gray-500 text-base leading-relaxed">{row.before}</p>
               </div>
@@ -767,12 +769,12 @@ const BeforeAfter = () => {
 
           {/* Mobile only: "Com a TeamMate" block */}
           <div className="md:hidden border-t border-white/10">
-            <div className="px-8 py-6 flex items-center gap-3">
+            <div className="px-4 md:px-8 py-6 flex items-center gap-3">
               <span className="flex items-center justify-center w-7 h-7 rounded-full bg-primary/15 border border-primary/30 text-primary font-bold text-sm">✓</span>
               <span className="text-sm font-semibold text-primary uppercase tracking-wider">Com a TeamMate</span>
             </div>
             {beforeAfterRows.map((row, i) => (
-              <div key={i} className="border-t border-white/5 px-8 py-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors duration-300">
+              <div key={i} className="border-t border-white/5 px-4 md:px-8 py-6 flex items-start gap-4 hover:bg-white/[0.02] transition-colors duration-300">
                 <span className="mt-0.5 flex-shrink-0 text-primary text-base">✓</span>
                 <p className="text-white text-base font-medium leading-relaxed">{row.after}</p>
               </div>
@@ -1100,7 +1102,7 @@ const Testimonials = () => {
           </div>
 
           {/* Dot indicators */}
-          <div className="absolute -bottom-2 left-0 right-0 flex justify-center gap-2" role="tablist" aria-label="Navegar testemunhos">
+          <div className="absolute -bottom-10 md:-bottom-2 left-0 right-0 flex justify-center gap-2" role="tablist" aria-label="Navegar testemunhos">
             {TESTIMONIALS.map((_, i) => (
               <button
                 key={i}
@@ -1166,7 +1168,7 @@ const Statistics = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setStarted(true); observer.disconnect(); } },
-      { threshold: 0.3 }
+      { threshold: 0.1 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -1402,14 +1404,16 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
     <section className="py-24 px-6 bg-surface/30" ref={ref}>
       <div className="max-w-5xl mx-auto relative rounded-[3rem] overflow-hidden border border-border bg-[#0a0a0a]">
         {/* Animated EtherealShadow background — same as Hero */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-60" aria-hidden="true">
-          <EtherealShadow
-            color="rgba(5, 102, 141, 0.7)"
-            animation={{ scale: 100, speed: 60 }}
-            noise={{ opacity: 0.6, scale: 1.5 }}
-          />
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-60 flex items-center justify-center" aria-hidden="true">
+          <div className="w-[300%] h-[200%] md:w-full md:h-full flex-shrink-0">
+            <EtherealShadow
+              color="rgba(5, 102, 141, 0.7)"
+              animation={{ scale: 100, speed: 60 }}
+              noise={{ opacity: 0.6, scale: 1.5 }}
+            />
+          </div>
         </div>
-        <div className={`relative z-10 p-16 md:p-24 text-center ${inView ? 'reveal-up' : 'opacity-0'}`}>
+        <div className={`relative z-10 px-6 py-16 md:p-24 text-center ${inView ? 'reveal-up' : 'opacity-0'}`}>
           <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6 leading-tight max-w-2xl mx-auto">
             A tua equipa merece trabalhar menos no que não importa
           </h2>
