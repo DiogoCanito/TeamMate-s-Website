@@ -11,6 +11,7 @@ import {
 import { EtherealShadow } from './components/ui/etheral-shadow';
 import { LeadModal } from './components/LeadModal';
 import { QuizModal } from './components/QuizModal';
+import { supabase } from './lib/supabase';
 
 /* ─── Focus style helper ─────────────────────────────── */
 const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
@@ -536,12 +537,61 @@ const ContactSection = () => {
     aceitouTermos: false,
   });
   const [showModal, setShowModal] = useState(false);
+  const [modalState, setModalState] = useState<'loading' | 'success' | 'error'>('loading');
 
   const isValid = formData.nome && formData.email && formData.assunto && formData.mensagem && formData.aceitouTermos;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isValid) setShowModal(true);
+    if (!isValid) return;
+
+    setShowModal(true);
+    setModalState('loading');
+
+    try {
+      // Create a promise for the Supabase request
+      const supabaseRequest = supabase
+        .from('contactos')
+        .insert([
+          {
+            nome: formData.nome,
+            email: formData.email,
+            telefone: formData.telefone || null,
+            assunto: formData.assunto,
+            mensagem: formData.mensagem,
+            aceitou_termos: formData.aceitouTermos
+          }
+        ]);
+
+      // Create a timeout promise (6 seconds)
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Timeout de envio: O pedido demorou mais de 6 segundos.")), 6000);
+      });
+
+      // Race both promises
+      const { error } = await Promise.race([supabaseRequest, timeoutPromise]) as any;
+
+      if (error) {
+        console.error('Error saving contact:', error);
+        setModalState('error');
+        return;
+      }
+
+      setModalState('success');
+      // Limpar o form em caso de sucesso
+      setFormData({
+        nome: '',
+        email: '',
+        telefone: '',
+        assunto: '',
+        mensagem: '',
+        aceitouTermos: false,
+      });
+
+    } catch (err) {
+      console.error('Unexpected error or timeout:', err);
+      setModalState('error');
+    }
   };
 
   return (
@@ -690,7 +740,9 @@ const ContactSection = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-[#0a0a0a]/80 backdrop-blur-sm"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                if (modalState !== 'loading') setShowModal(false);
+              }}
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -698,37 +750,95 @@ const ContactSection = () => {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-md bg-[#111318] border border-white/10 rounded-2xl p-8 md:p-10 text-center shadow-2xl flex flex-col items-center"
             >
-              <button
-                onClick={() => setShowModal(false)}
-                className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
-              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+              {modalState !== 'loading' && (
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="absolute top-5 right-5 text-gray-500 hover:text-white transition-colors cursor-pointer w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"
                 >
-                  <CheckCircle className="w-10 h-10 text-primary" />
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+
+              {modalState === 'loading' && (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex flex-col items-center justify-center flex-1 py-4"
+                >
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                  </div>
+                  <h3 className="text-2xl font-display font-semibold mb-3 text-white">A enviar a mensagem...</h3>
+                  <p className="text-gray-400 leading-relaxed mb-2">
+                    Por favor, aguarda enquanto guardamos as tuas informações.
+                  </p>
                 </motion.div>
-              </div>
+              )}
 
-              <h3 className="text-2xl font-display font-semibold mb-3 text-white">Mensagem enviada com sucesso!</h3>
-              <p className="text-gray-400 leading-relaxed mb-6">
-                Obrigado por entrares em contacto connosco. A nossa equipa vai analisar a tua mensagem e responder-te o mais brevemente possível.
-              </p>
-              <p className="text-sm text-gray-500 mb-8 font-medium">
-                Normalmente respondemos em menos de 24 horas.
-              </p>
+              {modalState === 'success' && (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex flex-col items-center justify-center flex-1"
+                >
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                    >
+                      <CheckCircle className="w-10 h-10 text-primary" />
+                    </motion.div>
+                  </div>
+                  <h3 className="text-2xl font-display font-semibold mb-3 text-white">Mensagem enviada com sucesso!</h3>
+                  <p className="text-gray-400 leading-relaxed mb-6">
+                    Obrigado por entrares em contacto connosco. A nossa equipa vai analisar a tua mensagem e responder-te o mais brevemente possível.
+                  </p>
+                  <p className="text-sm text-gray-500 mb-8 font-medium">
+                    Normalmente respondemos em menos de 24 horas.
+                  </p>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="w-full py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-hover transition-colors flex items-center justify-center cursor-pointer shadow-lg"
+                  >
+                    Fechar e Voltar ao Site
+                  </button>
+                </motion.div>
+              )}
 
-              <a
-                href="/"
-                className="w-full py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-hover transition-colors flex items-center justify-center cursor-pointer shadow-lg"
-              >
-                Voltar à Página Inicial
-              </a>
+              {modalState === 'error' && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex flex-col items-center justify-center flex-1 py-4"
+                >
+                  <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+                    >
+                      <X className="w-10 h-10 text-red-500" />
+                    </motion.div>
+                  </div>
+                  <h3 className="text-2xl font-display font-semibold mb-3 text-white">Ocorreu um erro</h3>
+                  <p className="text-gray-400 leading-relaxed mb-8">
+                    Não foi possível guardar a tua mensagem neste momento. Pode ser um problema de ligação ou demora excessiva. Por favor, tenta novamente mais tarde.
+                  </p>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="w-full py-3.5 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-colors flex items-center justify-center cursor-pointer border border-white/10"
+                  >
+                    Tentar Novamente
+                  </button>
+                </motion.div>
+              )}
             </motion.div>
           </div>
         )}

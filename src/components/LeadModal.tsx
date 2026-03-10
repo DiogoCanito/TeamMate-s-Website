@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle, ChevronDown } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
 
@@ -12,6 +13,7 @@ interface LeadModalProps {
 export function LeadModal({ isOpen, onClose }: LeadModalProps) {
     const [step, setStep] = useState(1);
     const [direction, setDirection] = useState(1);
+    const [leadId, setLeadId] = useState<string | null>(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -37,14 +39,45 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
                 revenue: '',
                 challenge: ''
             });
+            setLeadId(null);
         }
     }, [isOpen]);
 
     if (!isOpen) return null;
 
-    const handleNext = () => {
-        setDirection(1);
-        setStep(2);
+    const handleNext = async () => {
+        if (!step1Valid) return;
+
+        try {
+            const { data, error } = await supabase
+                .from('leads')
+                .insert([
+                    {
+                        nome: formData.name,
+                        email: formData.email,
+                        telefone: formData.phone,
+                        aceitou_termos: formData.acceptTerms,
+                        passo_concluido: 1
+                    }
+                ])
+                .select('id')
+                .single();
+
+            if (error) {
+                console.error('Error saving lead (step 1):', error);
+                alert('Ocorreu um erro. Por favor, tenta novamente.');
+                return;
+            }
+
+            if (data) {
+                setLeadId(data.id);
+            }
+
+            setDirection(1);
+            setStep(2);
+        } catch (err) {
+            console.error('Unexpected error:', err);
+        }
     };
 
     const handlePrev = () => {
@@ -52,10 +85,34 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
         setStep(1);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setDirection(1);
-        setStep(3);
+        if (!step2Valid || !leadId) return;
+
+        try {
+            const { error } = await supabase
+                .from('leads')
+                .update({
+                    empresa: formData.company,
+                    faturacao: formData.revenue,
+                    desafio: formData.challenge,
+                    passo_concluido: 2
+                })
+                .eq('id', leadId);
+
+            if (error) {
+                console.error('Error updating lead (step 2):', error);
+                // We still want to show success because step 1 worked, but good to log
+            }
+
+            setDirection(1);
+            setStep(3);
+        } catch (err) {
+            console.error('Unexpected error:', err);
+            // Move to success anyway since contact info is saved
+            setDirection(1);
+            setStep(3);
+        }
     };
 
     const handleClose = () => {
