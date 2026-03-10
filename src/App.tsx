@@ -11,6 +11,7 @@ import {
 import { EtherealShadow } from './components/ui/etheral-shadow';
 import { LeadModal } from './components/LeadModal';
 import { QuizModal } from './components/QuizModal';
+import { UnderConstructionModal } from './components/UnderConstructionModal';
 
 /* ─── Focus style helper ─────────────────────────────── */
 const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
@@ -49,21 +50,24 @@ function useInView(threshold = 0.15) {
 }
 
 /* ─── Navbar ─────────────────────────────────────────── */
-const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
+export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Serviços', href: '#cases' },
-    { label: 'Processo', href: '#process' },
-    { label: 'Testemunhos', href: '#testimonials' },
+    { label: 'Serviços', href: '/#cases' },
+    { label: 'Processo', href: '/#process' },
+    { label: 'Testemunhos', href: '/#testimonials' },
     { label: 'Contacto', href: '/contactos' },
   ];
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith('#') && href !== '#') {
-      e.preventDefault();
-      const target = document.querySelector(href);
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    const targetId = href.startsWith('/#') ? href.substring(1) : href;
+    if (targetId.startsWith('#') && targetId !== '#') {
+      if (window.location.pathname === '/') {
+        e.preventDefault();
+        const target = document.querySelector(targetId);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      }
     }
     setIsOpen(false);
   };
@@ -788,7 +792,7 @@ const BeforeAfter = () => {
 };
 
 /* ─── About ──────────────────────────────────────────── */
-const About = () => {
+const About = ({ onOpenUnderConstruction }: { onOpenUnderConstruction: () => void }) => {
   const { ref, inView } = useInView();
   return (
     <section id="about" className="py-24 px-6 bg-surface/50" ref={ref}>
@@ -828,9 +832,9 @@ const About = () => {
           </div>
 
           <div className="relative group inline-flex">
-            <a href="/radmate" className={`relative flex items-center justify-center px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+            <button onClick={onOpenUnderConstruction} className={`relative flex items-center justify-center px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
               Ver Caso de Estudo
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -963,7 +967,7 @@ const TESTIMONIALS = [
   },
 ];
 
-const Testimonials = () => {
+export const Testimonials = () => {
   const { ref, inView } = useInView();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [exitX, setExitX] = useState<number>(0);
@@ -1436,26 +1440,33 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
 };
 
 /* ─── Footer ─────────────────────────────────────────── */
-const Footer = () => {
+export const Footer = ({ onOpenUnderConstruction }: { onOpenUnderConstruction: () => void }) => {
   const scrollTo = (href: string) => {
-    if (href === '#') return;
-    const target = document.querySelector(href);
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    const targetId = href.startsWith('/#') ? href.substring(1) : href;
+    if (targetId === '#') return false;
+    if (window.location.pathname === '/') {
+      const target = document.querySelector(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+        return true;
+      }
+    }
+    return false;
   };
 
   const footerCols = [
     {
       title: 'Navegação',
       links: [
-        { label: 'Serviços', href: '#cases' },
-        { label: 'Processo', href: '#process' },
-        { label: 'Testemunhos', href: '#testimonials' },
+        { label: 'Serviços', href: '/#cases' },
+        { label: 'Processo', href: '/#process' },
+        { label: 'Testemunhos', href: '/#testimonials' },
       ],
     },
     {
       title: 'Empresa',
       links: [
-        { label: 'FAQs', href: '#faq' },
+        { label: 'FAQs', href: '/#faq' },
         { label: 'Contacto', href: '/contactos' },
         { label: 'RadMate', href: '/radmate' },
       ],
@@ -1497,7 +1508,15 @@ const Footer = () => {
                     <a
                       key={link.label}
                       href={link.href}
-                      onClick={(e) => { if (link.href.startsWith('#') && link.href !== '#') { e.preventDefault(); scrollTo(link.href); } }}
+                      onClick={(e) => {
+                        if (link.label === 'RadMate') {
+                          e.preventDefault();
+                          onOpenUnderConstruction();
+                        } else {
+                          const handled = scrollTo(link.href);
+                          if (handled) e.preventDefault();
+                        }
+                      }}
                       className={`hover:text-white transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
                     >
                       {link.label}
@@ -1539,6 +1558,7 @@ const Footer = () => {
 export default function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
+  const [isUnderConstructionOpen, setIsUnderConstructionOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-primary/30">
@@ -1552,7 +1572,7 @@ export default function App() {
         <Features />
         <BeforeAfter />
         <Testimonials />
-        <About />
+        <About onOpenUnderConstruction={() => setIsUnderConstructionOpen(true)} />
         <Products />
         <Process />
         <Statistics />
@@ -1560,12 +1580,16 @@ export default function App() {
         <FAQ />
         <CTA onOpenModal={() => setIsModalOpen(true)} />
       </main>
-      <Footer />
+      <Footer onOpenUnderConstruction={() => setIsUnderConstructionOpen(true)} />
       <LeadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <QuizModal
         isOpen={isQuizModalOpen}
         onClose={() => setIsQuizModalOpen(false)}
         onOpenLeadModal={() => setIsModalOpen(true)}
+      />
+      <UnderConstructionModal
+        isOpen={isUnderConstructionOpen}
+        onClose={() => setIsUnderConstructionOpen(false)}
       />
     </div>
   );

@@ -114,13 +114,35 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 
             {/* Mobile hamburger */}
             <button
-              className={`md:hidden text-text-main cursor-pointer ${focusRing} rounded`}
+              className={`flex items-center justify-center w-10 h-10 md:hidden text-text-main cursor-pointer ${focusRing} rounded`}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
               aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
             >
-              {isOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+              <AnimatePresence mode="wait" initial={false}>
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="w-6 h-6" aria-hidden="true" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="w-6 h-6" aria-hidden="true" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </div>
         </nav>
@@ -1075,7 +1097,7 @@ const Testimonials = () => {
           </div>
 
           {/* Dot indicators */}
-          <div className="absolute -bottom-2 left-0 right-0 flex justify-center gap-2" role="tablist" aria-label="Navegar testemunhos">
+          <div className="absolute -bottom-10 md:-bottom-2 left-0 right-0 flex justify-center gap-2" role="tablist" aria-label="Navegar testemunhos">
             {TESTIMONIALS.map((_, i) => (
               <button
                 key={i}
