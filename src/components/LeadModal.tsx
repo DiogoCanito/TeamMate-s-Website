@@ -49,19 +49,20 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
         if (!step1Valid) return;
 
         try {
-            const { data, error } = await supabase
+            const newLeadId = crypto.randomUUID();
+
+            const { error } = await supabase
                 .from('leads')
                 .insert([
                     {
+                        id: newLeadId,
                         nome: formData.name,
                         email: formData.email,
                         telefone: formData.phone,
                         aceitou_termos: formData.acceptTerms,
                         passo_concluido: 1
                     }
-                ])
-                .select('id')
-                .single();
+                ]);
 
             if (error) {
                 console.error('Error saving lead (step 1):', error);
@@ -69,10 +70,7 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
                 return;
             }
 
-            if (data) {
-                setLeadId(data.id);
-            }
-
+            setLeadId(newLeadId);
             setDirection(1);
             setStep(2);
         } catch (err) {
