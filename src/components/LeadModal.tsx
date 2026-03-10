@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, CheckCircle, ChevronDown } from 'lucide-react';
+import { X, CheckCircle, ChevronDown, Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
@@ -14,6 +14,7 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
     const [step, setStep] = useState(1);
     const [direction, setDirection] = useState(1);
     const [leadId, setLeadId] = useState<string | null>(null);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
     const [formData, setFormData] = useState({
         name: '',
@@ -40,6 +41,7 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
                 challenge: ''
             });
             setLeadId(null);
+            setSubmitStatus('idle');
         }
     }, [isOpen]);
 
@@ -87,29 +89,34 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
         e.preventDefault();
         if (!step2Valid || !leadId) return;
 
+        setDirection(1);
+        setStep(3);
+        setSubmitStatus('loading');
+
         try {
-            const { error } = await supabase
-                .from('leads')
-                .update({
-                    empresa: formData.company,
-                    faturacao: formData.revenue,
-                    desafio: formData.challenge,
-                    passo_concluido: 2
-                })
-                .eq('id', leadId);
+            const supabaseRequest = supabase.rpc('update_lead_step_2', {
+                lead_id: leadId,
+                p_empresa: formData.company,
+                p_faturacao: formData.revenue,
+                p_desafio: formData.challenge
+            });
+
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error("Timeout de envio: O pedido demorou mais de 6 segundos.")), 6000);
+            });
+
+            const { error } = await Promise.race([supabaseRequest, timeoutPromise]) as any;
 
             if (error) {
                 console.error('Error updating lead (step 2):', error);
-                // We still want to show success because step 1 worked, but good to log
+                setSubmitStatus('error');
+                return;
             }
 
-            setDirection(1);
-            setStep(3);
+            setSubmitStatus('success');
         } catch (err) {
-            console.error('Unexpected error:', err);
-            // Move to success anyway since contact info is saved
-            setDirection(1);
-            setStep(3);
+            console.error('Unexpected error or timeout:', err);
+            setSubmitStatus('error');
         }
     };
 
@@ -358,30 +365,83 @@ export function LeadModal({ isOpen, onClose }: LeadModalProps) {
                                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                                 className="flex flex-col items-center justify-center text-center h-full sm:pt-4"
                             >
-                                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                                    <motion.div
-                                        initial={{ scale: 0, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
-                                    >
-                                        <CheckCircle className="w-10 h-10 text-primary" />
-                                    </motion.div>
-                                </div>
+                                {submitStatus === 'loading' && (
+                                    <div className="flex flex-col items-center justify-center py-6">
+                                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                                            <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                                        </div>
+                                        <h3 className="text-3xl font-display font-semibold mb-4 text-white">A enviar as tuas informações...</h3>
+                                        <p className="text-gray-400 mb-8 leading-relaxed max-w-sm">
+                                            Aguarde enquanto preparamos os teus dados.
+                                        </p>
+                                    </div>
+                                )}
 
-                                <h3 className="text-3xl font-display font-semibold mb-4 text-white">Mensagem recebida!</h3>
-                                <p className="text-gray-300 mb-4 leading-relaxed max-w-sm">
-                                    Obrigado pelo teu interesse, <strong className="text-white">{formData.name}</strong>. A nossa equipa vai analisar as tuas respostas e entrar em contacto contigo em breve para marcar a tua conversa gratuita.
-                                </p>
-                                <p className="text-sm text-gray-500 mb-10">
-                                    Entraremos em contacto pelo email ou telefone que indicaste.
-                                </p>
+                                {submitStatus === 'success' && (
+                                    <>
+                                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
+                                            <motion.div
+                                                initial={{ scale: 0, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
+                                            >
+                                                <CheckCircle className="w-10 h-10 text-primary" />
+                                            </motion.div>
+                                        </div>
 
-                                <button
-                                    onClick={handleClose}
-                                    className={`w-full py-4 rounded-xl font-medium text-white bg-white/5 hover:bg-white/10 transition-colors border border-white/10 cursor-pointer ${focusRing}`}
-                                >
-                                    Voltar à Página Inicial
-                                </button>
+                                        <h3 className="text-3xl font-display font-semibold mb-4 text-white">Mensagem recebida!</h3>
+                                        <p className="text-gray-300 mb-4 leading-relaxed max-w-sm">
+                                            Obrigado pelo teu interesse, <strong className="text-white">{formData.name}</strong>. A nossa equipa vai analisar as tuas respostas e entrar em contacto contigo em breve para marcar a tua conversa gratuita.
+                                        </p>
+                                        <p className="text-sm text-gray-500 mb-10">
+                                            Entraremos em contacto pelo email ou telefone que indicaste.
+                                        </p>
+
+                                        <button
+                                            onClick={handleClose}
+                                            className={`w-full py-4 rounded-xl font-medium text-white bg-primary hover:bg-primary-hover transition-colors shadow-lg cursor-pointer ${focusRing}`}
+                                        >
+                                            Voltar à Página Inicial
+                                        </button>
+                                    </>
+                                )}
+
+                                {submitStatus === 'error' && (
+                                    <>
+                                        <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mb-6">
+                                            <motion.div
+                                                initial={{ scale: 0, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.1 }}
+                                            >
+                                                <X className="w-10 h-10 text-red-500" />
+                                            </motion.div>
+                                        </div>
+
+                                        <h3 className="text-3xl font-display font-semibold mb-4 text-white">Ocorreu um erro</h3>
+                                        <p className="text-gray-400 leading-relaxed mb-4 max-w-sm">
+                                            Houve uma falha de comunicação com o servidor e as tuas informações não puderam ser guardadas na totalidade.
+                                        </p>
+                                        <p className="text-sm text-gray-500 mb-10">
+                                            Por favor, tenta de novo mais tarde.
+                                        </p>
+
+                                        <div className="flex w-full gap-4">
+                                            <button
+                                                onClick={() => { setSubmitStatus('idle'); setStep(2); setDirection(-1); }}
+                                                className={`flex-1 py-4 rounded-xl font-medium text-white bg-white/10 hover:bg-white/20 transition-colors border border-white/10 cursor-pointer ${focusRing}`}
+                                            >
+                                                Tentar Novamente
+                                            </button>
+                                            <button
+                                                onClick={handleClose}
+                                                className={`flex-1 py-4 rounded-xl font-medium text-white bg-primary hover:bg-primary-hover transition-colors shadow-lg cursor-pointer ${focusRing}`}
+                                            >
+                                                Fechar
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
                             </motion.div>
                         )}
                     </AnimatePresence>
