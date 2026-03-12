@@ -52,6 +52,7 @@ function useInView(threshold = 0.15) {
 /* ─── Navbar ─────────────────────────────────────────── */
 export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   const navLinks = [
     { label: 'Serviços', href: '/#cases' },
@@ -59,6 +60,34 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
     { label: 'Testemunhos', href: '/#testimonials' },
     { label: 'Contacto', href: '/contactos' },
   ];
+
+  useEffect(() => {
+    if (window.location.pathname !== '/') return;
+
+    const navSectionIds = ['cases', 'process', 'testimonials'];
+
+    const handleScroll = () => {
+      let current = '';
+      const scrollY = window.scrollY;
+
+      for (const section of navSectionIds) {
+        const element = document.getElementById(section);
+        if (element) {
+          const top = element.offsetTop;
+          const height = element.offsetHeight;
+          if (scrollY >= top - 250 && scrollY < top + height - 250) {
+            current = section;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     const targetId = href.startsWith('/#') ? href.substring(1) : href;
@@ -94,17 +123,22 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
 
             {/* Desktop nav links — centred */}
             <ul className="hidden md:flex items-center gap-8" role="list">
-              {navLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleNav(e, link.href)}
-                    className={`text-base font-display font-medium text-gray-400 hover:text-white transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {navLinks.map((link) => {
+                const targetId = link.href.startsWith('/#') ? link.href.substring(2) : '';
+                const isActive = activeSection === targetId && targetId !== '';
+
+                return (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      onClick={(e) => handleNav(e, link.href)}
+                      className={`text-base font-display font-medium transition-colors duration-200 cursor-pointer ${focusRing} rounded ${isActive ? 'text-primary' : 'text-gray-400 hover:text-white'}`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
 
             {/* Desktop CTA */}
@@ -833,7 +867,7 @@ const About = ({ onOpenUnderConstruction }: { onOpenUnderConstruction: () => voi
 
           <div className="relative group inline-flex">
             <button onClick={onOpenUnderConstruction} className={`relative flex items-center justify-center px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
-              Ver Caso de Estudo
+              Conhecer Software
             </button>
           </div>
         </div>
