@@ -208,13 +208,13 @@ const ContactSection = () => {
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-primary">
                 <Mail className="w-5 h-5" />
               </div>
-              <span className="text-lg">geral@teammate.pt</span>
+              <span className="text-lg">geral@myteammate.pt</span>
             </div>
             <div className="flex items-center gap-4 text-gray-300">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-primary">
                 <HeadphonesIcon className="w-5 h-5" />
               </div>
-              <span className="text-lg">+351 900 000 000</span>
+              <span className="text-lg">+351 933 318 069</span>
             </div>
             <div className="flex items-center gap-4 text-gray-300">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center text-primary">
