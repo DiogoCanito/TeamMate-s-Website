@@ -843,10 +843,10 @@ const About = ({ onOpenUnderConstruction }: { onOpenUnderConstruction: () => voi
 
         <div>
           <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">
-            RadMate — Relatórios médicos em minutos, não em horas
+            RadMate — Relatórios instantâneos gerados com IA
           </h2>
           <p className="text-lg text-gray-400 mb-10 leading-relaxed">
-            Os médicos passam horas por dia a documentar o que faziam em minutos. Criámos o RadMate para eliminar esse desperdício — um assistente de IA que transcreve, estrutura e gera relatórios médicos completos automaticamente, para que os médicos voltem a focar-se nos pacientes.
+            O RadMate utiliza inteligência artificial para transformar ditado médico em relatórios radiológicos estruturados. Transcreve o áudio, organiza a informação clínica e gera automaticamente um relatório completo, mantendo a estrutura e terminologia médica adequadas.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 mb-10">
