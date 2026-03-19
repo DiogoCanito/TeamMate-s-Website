@@ -232,8 +232,8 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
       <div className="absolute inset-0 z-0 pointer-events-none opacity-50 flex items-center justify-center">
         <div className="w-[300%] h-[150%] md:w-full md:h-full flex-shrink-0">
           <EtherealShadow
-            color="rgba(5, 102, 141, 0.7)"
-            animation={{ scale: 100, speed: 60 }}
+            color="rgba(30, 144, 210, 0.75)"
+            animation={{ scale: 100, speed: 90 }}
             noise={{ opacity: 0.6, scale: 1.5 }}
           />
         </div>

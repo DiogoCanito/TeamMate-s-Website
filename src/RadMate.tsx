@@ -51,15 +51,39 @@ function useInView(threshold = 0.15) {
 /* ─── Navbar ─────────────────────────────────────────── */
 const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
 
   const navLinks = [
-    { label: 'O Problema', href: '#problema' },
     { label: 'Como Funciona', href: '#process' },
-    { label: 'Funcionalidades', href: '#features' },
     { label: 'Planos', href: '#planos' },
-    { label: 'Testemunhos', href: '#testimonials' },
     { label: 'FAQs', href: '#faq' },
   ];
+
+  useEffect(() => {
+    const navSectionIds = ['process', 'planos', 'faq'];
+
+    const handleScroll = () => {
+      let current = '';
+      const scrollY = window.scrollY;
+
+      for (const section of navSectionIds) {
+        const element = document.getElementById(section);
+        if (element) {
+          const top = element.offsetTop;
+          const height = element.offsetHeight;
+          if (scrollY >= top - 250 && scrollY < top + height - 250) {
+            current = section;
+          }
+        }
+      }
+      setActiveSection(current);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href === '#') return;
@@ -81,22 +105,31 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           <div className="px-6 h-[72px] flex items-center justify-between">
             {/* RadMate Logo */}
             <a href="/" aria-label="RadMate — página inicial" className={`flex items-center ${focusRing} rounded`}>
-              <span className="text-2xl font-bold text-primary">RadMate</span>
+              <img
+                src="/images/Logo RadMate.png"
+                alt="RadMate"
+                className="h-14 md:h-16 w-auto"
+                draggable={false}
+              />
             </a>
 
             {/* Desktop nav links — centred */}
             <ul className="hidden md:flex items-center gap-8" role="list">
-              {navLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleNav(e, link.href)}
-                    className={`text-base font-display font-medium text-text-muted hover:text-text-main transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {navLinks.map((link) => {
+                const sectionId = link.href.replace('#', '');
+                const isActive = activeSection === sectionId;
+                return (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      onClick={(e) => handleNav(e, link.href)}
+                      className={`text-base font-display font-medium transition-colors duration-200 cursor-pointer ${focusRing} rounded ${isActive ? 'text-primary' : 'text-text-muted hover:text-text-main'}`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
 
             {/* Desktop CTA */}
@@ -105,7 +138,7 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
                 <button
                   onClick={onOpenModal}
-                  className={`relative px-5 py-2.5 text-sm font-medium text-text-main bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+                  className={`relative px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
                 >
                   Agendar Conversa
                 </button>
@@ -156,22 +189,26 @@ const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           role="menu"
         >
           {/* Mobile nav links */}
-          {navLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              role="menuitem"
-              onClick={(e) => handleNav(e, link.href)}
-              className={`text-lg font-display font-medium text-text-muted hover:text-text-main py-3 border-b border-border transition-colors duration-200 cursor-pointer ${focusRing} rounded`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const sectionId = link.href.replace('#', '');
+            const isActive = activeSection === sectionId;
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                role="menuitem"
+                onClick={(e) => handleNav(e, link.href)}
+                className={`text-lg font-display font-medium py-3 border-b border-border transition-colors duration-200 cursor-pointer ${focusRing} rounded ${isActive ? 'text-primary' : 'text-text-muted hover:text-text-main'}`}
+              >
+                {link.label}
+              </a>
+            );
+          })}
 
           <div className="relative group mt-2 w-full">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
-              className={`relative w-full px-5 py-3.5 text-sm font-medium text-text-main bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
+              className={`relative w-full px-5 py-3.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
               onClick={() => { setIsOpen(false); onOpenModal(); }}
             >
               Agendar Conversa
@@ -233,7 +270,7 @@ const Hero = ({ onOpenModal, onOpenQuizModal }: { onOpenModal: () => void, onOpe
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
-              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
+              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer border border-transparent ${focusRing}`}
             >
               Agendar Conversa Gratuita
             </button>
@@ -320,16 +357,16 @@ const ClockCard = () => {
     >
       <div className="mb-8 flex items-center justify-center">
         <svg viewBox="0 0 80 80" className="w-24 h-24" aria-hidden="true">
-          <circle cx="40" cy="40" r="36" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="2" />
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#374151" strokeWidth="2" />
           <circle
             cx="40" cy="40" r="36"
             fill="none"
-            stroke="var(--color-primary, #3b82f6)"
+            stroke="#06658d"
             strokeWidth="4"
             strokeDasharray="226"
             strokeDashoffset="56"
             strokeLinecap="round"
-            style={{ opacity: hovered ? 0.3 : 0, transition: 'opacity 0.5s' }}
+            style={{ opacity: hovered ? 0.4 : 0, transition: 'opacity 0.5s' }}
           />
           {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
             <line
@@ -338,7 +375,7 @@ const ClockCard = () => {
               y1={deg % 90 === 0 ? "10" : "12"}
               x2="40"
               y2={deg % 90 === 0 ? "15" : "14"}
-              stroke="rgba(255,255,255,0.3)"
+              stroke="#374151"
               strokeWidth={deg % 90 === 0 ? "2.5" : "1.5"}
               strokeLinecap="round"
               transform={`rotate(${deg} 40 40)`}
@@ -346,101 +383,106 @@ const ClockCard = () => {
           ))}
           <line
             x1="40" y1="40" x2="40" y2="22"
-            stroke="white"
+            stroke="#374151"
             strokeWidth="3"
             strokeLinecap="round"
             style={{ transformOrigin: '40px 40px', transform: `rotate(${hourAngle}deg)` }}
           />
           <line
             x1="40" y1="40" x2="40" y2="16"
-            stroke="var(--color-primary, #3b82f6)"
+            stroke="#06658d"
             strokeWidth="2"
             strokeLinecap="round"
             style={{ transformOrigin: '40px 40px', transform: `rotate(${minuteAngle}deg)` }}
           />
-          <circle cx="40" cy="40" r="3" fill="white" />
-          <circle cx="40" cy="40" r="1.5" fill="var(--color-primary, #3b82f6)" />
+          <circle cx="40" cy="40" r="3" fill="#374151" />
+          <circle cx="40" cy="40" r="1.5" fill="#06658d" />
         </svg>
       </div>
       <div className="relative z-10">
-        <h3 className="text-2xl font-display font-semibold mb-3">Tempo devolvido à tua equipa</h3>
+        <h3 className="text-2xl font-display font-semibold mb-3">Horas devolvidas ao teu dia</h3>
         <p className="text-text-muted leading-relaxed text-base">
-          As tuas equipas deixam de fazer trabalho repetitivo e passam a focar no que realmente importa.
+          O que antes demorava 20 minutos fica pronto em menos de 2. Todos os dias, em cada relatório.
         </p>
       </div>
       <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full blur-3xl transition-colors duration-500"
-        style={{ backgroundColor: hovered ? 'rgba(59,130,246,0.2)' : 'rgba(59,130,246,0.1)' }}
+        style={{ backgroundColor: hovered ? 'rgba(6,101,141,0.2)' : 'rgba(6,101,141,0.05)' }}
       />
     </div>
   );
 };
 
-/* ─── Hundred Percent Card ──────────────────────────── */
-const HundredPercentCard = () => {
-  const [drawKey, setDrawKey] = useState(0);
+/* ─── Accuracy Card ─────────────────────────── */
+const AccuracyCard = () => {
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div
-      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default"
-      onMouseEnter={() => setDrawKey(k => k + 1)}
+      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-start overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default group h-full"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <div className="mb-8 flex items-center justify-center">
-        {/* Organic ellipse + 100% text */}
-        <div className="relative flex items-center justify-center h-24">
-          <svg
-            key={drawKey}
-            viewBox="0 0 254 104"
-            className="absolute w-[220px]"
-            aria-hidden="true"
-            fill="none"
+      <style>{`
+        @keyframes pulseCheck {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+          100% { transform: scale(1); }
+        }
+        .check-anim {
+          animation: pulseCheck 1s ease-in-out infinite;
+        }
+      `}</style>
+      <div className="mb-8 flex items-center justify-center relative h-24 w-24">
+        <svg viewBox="0 0 80 80" className="w-20 h-20 relative z-10" aria-hidden="true">
+          {/* Document Base (Wider Portrait) */}
+          <path d="M 16 20 C 16 15.582 19.582 12 24 12 L 46 12 L 64 30 L 64 68 C 64 72.418 60.418 76 56 76 L 24 76 C 19.582 76 16 72.418 16 68 Z" fill="none" stroke="#374151" strokeWidth="4" strokeLinejoin="round" />
+          {/* Folded corner */}
+          <path d="M 46 12 L 46 30 L 64 30" fill="none" stroke="#374151" strokeWidth="4" strokeLinejoin="round" />
+          
+          {/* Document Content Lines */}
+          <line x1="28" y1="42" x2="52" y2="42" stroke="#374151" strokeWidth="3" strokeLinecap="round" />
+          <line x1="28" y1="52" x2="52" y2="52" stroke="#374151" strokeWidth="3" strokeLinecap="round" />
+          <line x1="28" y1="62" x2="42" y2="62" stroke="#374151" strokeWidth="3" strokeLinecap="round" />
+
+          {/* Green Checkmark, appearing on hover */}
+          <g 
+            className={hovered ? "check-anim" : ""} 
+            style={{ 
+              opacity: hovered ? 1 : 0, 
+              transformOrigin: '64px 64px', 
+              transition: 'opacity 0.3s ease-in-out' 
+            }}
           >
-            <style>{`
-              @keyframes draw-ellipse {
-                from { stroke-dashoffset: 950; }
-                to   { stroke-dashoffset: 0; }
-              }
-              .ellipse-path {
-                stroke-dasharray: 950;
-                stroke-dashoffset: 0;
-                animation: draw-ellipse 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-              }
-            `}</style>
-            <path
-              className="ellipse-path"
-              d="M112.891 97.7022C140.366 97.0802 171.004 94.6715 201.087 87.5116C210.43 85.2881 219.615 82.6412 228.284 78.2473C232.198 76.3179 235.905 73.9942 239.348 71.3124C241.85 69.2557 243.954 66.7571 245.555 63.9408C249.34 57.3235 248.281 50.5341 242.498 45.6109C239.033 42.7237 235.228 40.2703 231.169 38.3054C219.443 32.7209 207.141 28.4382 194.482 25.534C184.013 23.1927 173.358 21.7755 162.64 21.2989C161.376 21.3512 160.113 21.181 158.908 20.796C158.034 20.399 156.857 19.1682 156.962 18.4535C157.115 17.8927 157.381 17.3689 157.743 16.9139C158.104 16.4588 158.555 16.0821 159.067 15.8066C160.14 15.4683 161.274 15.3733 162.389 15.5286C179.805 15.3566 196.626 18.8373 212.998 24.462C220.978 27.2494 228.798 30.4747 236.423 34.1232C240.476 36.1159 244.202 38.7131 247.474 41.8258C254.342 48.2578 255.745 56.9397 251.841 65.4892C249.793 69.8582 246.736 73.6777 242.921 76.6327C236.224 82.0192 228.522 85.4602 220.502 88.2924C205.017 93.7847 188.964 96.9081 172.738 99.2109C153.442 101.949 133.993 103.478 114.506 103.79C91.1468 104.161 67.9334 102.97 45.1169 97.5831C36.0094 95.5616 27.2626 92.1655 19.1771 87.5116C13.839 84.5746 9.1557 80.5802 5.41318 75.7725C-0.54238 67.7259 -1.13794 59.1763 3.25594 50.2827C5.82447 45.3918 9.29572 41.0315 13.4863 37.4319C24.2989 27.5721 37.0438 20.9681 50.5431 15.7272C68.1451 8.8849 86.4883 5.1395 105.175 2.83669C129.045 0.0992292 153.151 0.134761 177.013 2.94256C197.672 5.23215 218.04 9.01724 237.588 16.3889C240.089 17.3418 242.498 18.5197 244.933 19.6446C246.627 20.4387 247.725 21.6695 246.997 23.615C246.455 25.1105 244.814 25.5605 242.63 24.5811C230.322 18.9961 217.233 16.1904 204.117 13.4376C188.761 10.3438 173.2 8.36665 157.558 7.52174C129.914 5.70776 102.154 8.06792 75.2124 14.5228C60.6177 17.8788 46.5758 23.2977 33.5102 30.6161C26.6595 34.3329 20.4123 39.0673 14.9818 44.658C12.9433 46.8071 11.1336 49.1622 9.58207 51.6855C4.87056 59.5336 5.61172 67.2494 11.9246 73.7608C15.2064 77.0494 18.8775 79.925 22.8564 82.3236C31.6176 87.7101 41.3848 90.5291 51.3902 92.5804C70.6068 96.5773 90.0219 97.7419 112.891 97.7022Z"
-              stroke="var(--color-primary, #3b82f6)"
-              strokeWidth="2"
-            />
-          </svg>
-          <span className="relative z-10 text-5xl font-display font-semibold text-text-main">
-            100%
-          </span>
-        </div>
+            <circle cx="64" cy="64" r="11" fill="var(--color-surface, white)" stroke="#22c55e" strokeWidth="3" />
+            <path d="M 59 64 L 62 67 L 69 58" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+        </svg>
       </div>
-      <div>
-        <h3 className="text-2xl font-display font-semibold mb-3">100% personalizado ao teu negócio</h3>
-        <p className="text-text-muted leading-relaxed text-base">
-          Não adaptamos o teu negócio à ferramenta. Construímos a ferramenta à medida do teu negócio.
+      <div className="relative z-10 flex flex-col flex-1">
+        <h3 className="text-2xl font-display font-semibold mb-3">Relatórios sem erros e sem omissões</h3>
+        <p className="text-text-muted leading-relaxed text-base flex-1">
+          A IA verifica a consistência entre o teu áudio e o relatório gerado, sinalizando tudo o que não bate certo.
         </p>
       </div>
+      <div className="absolute -left-10 -bottom-10 w-40 h-40 rounded-full blur-3xl transition-colors duration-500"
+        style={{ backgroundColor: hovered ? 'rgba(34,197,94,0.15)' : 'rgba(6,101,141,0.05)' }}
+      />
     </div>
   );
 };
 
-/* ─── Line Chart Card ──────────────────────────────────── */
-const LINE_PATH = "M4,72 C18,72 22,40 36,38 C50,36 54,58 68,54 C82,50 86,20 100,16 C114,12 118,44 132,40 C146,36 150,24 164,18 C178,12 182,30 196,28 C210,26 214,10 228,6";
+/* ─── Custom Vocabulary Card (Animated Audio Wave) ── */
+const AUDIO_PATH = "M4,48 C12,48 16,35 24,35 C32,35 36,70 44,70 C52,70 56,15 64,15 C72,15 76,60 84,60 C92,60 96,25 104,25 C112,25 116,55 124,55 C132,55 136,10 144,10 C152,10 156,75 164,75 C172,75 176,30 184,30 C192,30 196,65 204,65 C212,65 216,48 228,48";
 
-const LineChartCard = () => {
+const CustomVocabularyCard = () => {
   const [hovered, setHovered] = useState(false);
   const [dotPos, setDotPos] = useState<{ x: number; y: number } | null>(null);
   const pathRef = useRef<SVGPathElement | null>(null);
   const rafRef = useRef<number | null>(null);
-  const progressRef = useRef(0);
 
   useEffect(() => {
     if (!hovered) {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      progressRef.current = 0;
       setDotPos(null);
       return;
     }
@@ -469,7 +511,7 @@ const LineChartCard = () => {
 
   return (
     <div
-      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default"
+      className="relative col-span-1 sm:col-span-3 lg:col-span-2 flex flex-col items-center justify-between overflow-hidden p-8 rounded-3xl bg-surface border border-border hover:border-border transition-colors duration-300 text-center cursor-default h-full"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
@@ -480,20 +522,19 @@ const LineChartCard = () => {
           aria-hidden="true"
           fill="none"
         >
-
           {/* Area fill under the line */}
           <path
-            d={LINE_PATH + " L228,88 L4,88 Z"}
-            fill="url(#chartGradient)"
+            d={AUDIO_PATH + " L228,96 L4,96 Z"}
+            fill="url(#audioGradient)"
           />
 
           {/* Gradient definition */}
           <defs>
-            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-primary, #3b82f6)" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="var(--color-primary, #3b82f6)" stopOpacity="0" />
+            <linearGradient id="audioGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#06658d" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="#06658d" stopOpacity="0" />
             </linearGradient>
-            <filter id="dotGlow">
+            <filter id="audioDotGlow">
               <feGaussianBlur stdDeviation="3" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
@@ -505,8 +546,8 @@ const LineChartCard = () => {
           {/* Main line */}
           <path
             ref={pathRef}
-            d={LINE_PATH}
-            stroke="var(--color-primary, #3b82f6)"
+            d={AUDIO_PATH}
+            stroke="#06658d"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -520,17 +561,17 @@ const LineChartCard = () => {
                 cx={dotPos.x}
                 cy={dotPos.y}
                 r="7"
-                fill="var(--color-primary, #3b82f6)"
+                fill="#06658d"
                 opacity="0.25"
-                filter="url(#dotGlow)"
+                filter="url(#audioDotGlow)"
               />
               {/* Inner bright dot */}
               <circle
                 cx={dotPos.x}
                 cy={dotPos.y}
                 r="4"
-                fill="var(--color-primary, #3b82f6)"
-                filter="url(#dotGlow)"
+                fill="#06658d"
+                filter="url(#audioDotGlow)"
               />
               <circle
                 cx={dotPos.x}
@@ -542,10 +583,10 @@ const LineChartCard = () => {
           )}
         </svg>
       </div>
-      <div>
-        <h3 className="text-2xl font-display font-semibold mb-3">Resultados em semanas, não meses</h3>
-        <p className="text-text-muted leading-relaxed text-base">
-          Do briefing à automação pronta a utilizar, o nosso processo é simples, rápido e sem fricção.
+      <div className="relative z-10 flex flex-col flex-1">
+        <h3 className="text-2xl font-display font-semibold mb-3">Fala como sempre falaste</h3>
+        <p className="text-text-muted leading-relaxed text-base flex-1">
+          Define os teus próprios atalhos clínicos. O RadMate aprende o teu vocabulário e adapta-se à tua forma de trabalhar.
         </p>
       </div>
     </div>
@@ -561,7 +602,7 @@ const Features = () => {
         <div className={`mb-16 ${inView ? 'reveal-up' : 'opacity-0'}`}>
           <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">PRINCIPAIS BENEFÍCIOS</p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold max-w-2xl leading-tight">
-            Menos esforço. Mais resultado. Sempre
+            Tudo o que precisas para reportar melhor, mais rápido
           </h2>
         </div>
 
@@ -572,10 +613,10 @@ const Features = () => {
             <ClockCard />
           </div>
           <div className={`col-span-1 sm:col-span-2 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '180ms' }}>
-            <HundredPercentCard />
+            <AccuracyCard />
           </div>
-          <div className={`col-span-1 sm:col-span-2 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '260ms' }}>
-            <LineChartCard />
+          <div className={`col-span-1 sm:col-span-2 h-full ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '260ms' }}>
+            <CustomVocabularyCard />
           </div>
 
           {/* Card 4 — Orbital integrations */}
@@ -823,7 +864,7 @@ const About = () => {
 
           <div className="relative group inline-flex">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
-            <button className={`relative px-8 py-3.5 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+            <button className={`relative px-8 py-3.5 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
               Ver Caso de Estudo
             </button>
           </div>
@@ -917,7 +958,7 @@ const Products = () => {
                 <div className="relative z-10 mt-2">
                   <div className="relative group/btn inline-flex">
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-20 group-hover/btn:opacity-50 transition duration-500" aria-hidden="true" />
-                    <button className={`relative px-5 py-2.5 bg-primary hover:bg-primary-hover text-text-main text-sm font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
+                    <button className={`relative px-5 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
                       {card.cta}
                     </button>
                   </div>
@@ -1201,9 +1242,9 @@ const Statistics = () => {
 
 /* ─── Process ────────────────────────────────────────── */
 const processSteps = [
-  { step: 1, title: 'Grava ou Importa', desc: 'Utiliza a tua voz para descrever o exame ou importa um áudio já existente. O RadMate transcreve tudo automaticamente com precisão clínica.', align: 'left', img: '/images/diagnostico_processo.webp', alt: 'Fase de gravação ou importação de áudio' },
-  { step: 2, title: 'A IA Constrói o Relatório', desc: 'Com base na transcrição e no template escolhido por ti, o RadMate gera automaticamente um relatório estruturado, completo e pronto a rever.', align: 'right', img: '/images/estrategia_processo.webp', alt: 'A IA a construir o relatório médico' },
-  { step: 3, title: 'Verifica e Exporta', desc: 'Revê o relatório gerado, confirma a consistência com o áudio original e exporta com um clique. Rápido, preciso e sem complicações.', align: 'left', img: '/images/desenvolvimento_processo.webp', alt: 'Revisão e exportação do relatório final' },
+  { step: 1, title: 'Grava ou Importa', desc: 'Utiliza a tua voz para descrever o exame ou importa um áudio já existente. O RadMate transcreve tudo automaticamente com precisão clínica.', align: 'left', img: '/images/TeamMate Imagens Processo.webp', alt: 'Fase de gravação ou importação de áudio' },
+  { step: 2, title: 'A IA Constrói o Relatório', desc: 'Com base na transcrição e no template escolhido por ti, o RadMate gera automaticamente um relatório estruturado, completo e pronto a rever.', align: 'right', img: '/images/TeamMate Imagens Processo (1).webp', alt: 'A IA a construir o relatório médico' },
+  { step: 3, title: 'Verifica e Exporta', desc: 'Revê o relatório gerado, confirma a consistência com o áudio original e exporta com um clique. Rápido, preciso e sem complicações.', align: 'left', img: '/images/TeamMate Imagens Processo (2).webp', alt: 'Revisão e exportação do relatório final' },
 ];
 
 const Process = () => {
@@ -1245,7 +1286,7 @@ const Process = () => {
         <div ref={wrapperRef} className="relative max-w-5xl mx-auto hidden md:block">
           {/* Connecting line clamped between centre of circle 1 and centre of circle 4 */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 w-px bg-border"
+            className="absolute left-1/2 -translate-x-1/2 w-px bg-gray-500"
             style={lineStyle}
             aria-hidden="true"
           />
@@ -1263,7 +1304,7 @@ const Process = () => {
               {/* Circle */}
               <div
                 ref={i === 0 ? firstCircleRef : i === processSteps.length - 1 ? lastCircleRef : undefined}
-                className="relative z-10 flex-shrink-0 w-16 h-16 rounded-full bg-background border-2 border-border flex items-center justify-center text-2xl font-display font-bold"
+                className="relative z-10 flex-shrink-0 w-16 h-16 rounded-full bg-background border-2 border-gray-500 flex items-center justify-center text-2xl font-display font-bold text-gray-500"
                 aria-label={`Passo ${p.step}`}
               >
                 {p.step}
@@ -1287,14 +1328,14 @@ const Process = () => {
         <div className="md:hidden relative">
           {/* Vertical line on the left, aligned with circle centres */}
           <div
-            className="absolute left-6 top-6 bottom-6 w-px bg-border"
+            className="absolute left-6 top-6 bottom-6 w-px bg-gray-500"
             aria-hidden="true"
           />
           {processSteps.map((p, i) => (
             <div key={i} className={`flex items-start gap-5 mb-12 last:mb-0 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150 + 200}ms` }}>
               {/* Circle on the left */}
               <div
-                className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-border flex items-center justify-center text-lg font-display font-bold"
+                className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-gray-500 flex items-center justify-center text-lg font-display font-bold text-gray-500"
                 aria-label={`Passo ${p.step}`}
               >
                 {p.step}
@@ -1416,7 +1457,7 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
-              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-text-main font-medium rounded-xl transition-all duration-300 text-lg cursor-pointer border border-transparent ${focusRing}`}
+              className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 text-lg cursor-pointer border border-transparent ${focusRing}`}
             >
               Quero a minha Call Gratuita
             </button>
