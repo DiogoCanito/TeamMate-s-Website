@@ -1,9 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
-import RadMate from './RadMate.tsx';
-import Contactos from './Contactos.tsx';
-import Auditoria from './Auditoria.tsx';
+import App from './App';
+import RadMate from './RadMate';
+import Contactos from './Contactos';
+import Auditoria from './Auditoria';
+import Astrotek from './Astrotek';
+import DonaBarba from './DonaBarba';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import './index.css';
@@ -12,7 +14,7 @@ const path = window.location.pathname;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {path === '/radmate' ? <RadMate /> : path === '/contactos' ? <Contactos /> : path === '/auditoria' ? <Auditoria /> : <App />}
+    {path === '/radmate' ? <RadMate /> : path === '/contactos' ? <Contactos /> : path === '/auditoria' ? <Auditoria /> : path === '/astrotek' ? <Astrotek /> : path === '/donabarba' ? <DonaBarba /> : <App />}
     <Analytics />
     <SpeedInsights />
   </StrictMode>,

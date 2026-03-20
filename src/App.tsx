@@ -876,6 +876,56 @@ const About = ({ onOpenUnderConstruction }: { onOpenUnderConstruction: () => voi
   );
 };
 
+/* ─── Portfolio ────────────────────────────────────────── */
+const Portfolio = () => {
+  const { ref, inView } = useInView();
+  return (
+    <section id="portfolio" className="py-24 px-6 relative" ref={ref}>
+      <div className="max-w-7xl mx-auto">
+        <div className={`mb-16 ${inView ? 'reveal-up' : 'opacity-0'}`}>
+          <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">PORTFOLIO</p>
+          <h2 className="text-4xl md:text-5xl font-display font-semibold max-w-2xl leading-tight">
+            Casos de Estudo
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* DonaBarba Card */}
+          <div className={`group relative flex flex-col overflow-hidden rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '100ms' }}>
+            <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/5">
+              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+DonaBarba+Screenshot" alt="DonaBarba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div className="p-8 flex flex-col flex-1">
+              <h3 className="text-2xl font-display font-semibold mb-3">DonaBarba</h3>
+              <p className="text-gray-400 leading-relaxed mb-6 flex-1">
+                Sistema completo de marcações online, gestão de barbeiros, stock e faturamento — para que a equipa se foque nos clientes.
+              </p>
+              <a href="/donabarba" className={`inline-flex items-center justify-center px-6 py-3 w-max border border-white/15 hover:bg-white/5 active:bg-white/5 active:scale-95 text-white font-medium rounded-xl transition-all duration-300 ${focusRing}`}>
+                Ver Caso de Estudo
+              </a>
+            </div>
+          </div>
+
+          {/* Astrotek Card */}
+          <div className={`group relative flex flex-col overflow-hidden rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '200ms' }}>
+            <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/5">
+              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+Astrotek+Screenshot" alt="Software Gestão Astrotek" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+            </div>
+            <div className="p-8 flex flex-col flex-1">
+              <h3 className="text-2xl font-display font-semibold mb-3">Software Gestão Astrotek</h3>
+              <p className="text-gray-400 leading-relaxed mb-6 flex-1">
+                Sistema centralizado para gestão de pedidos de reparação, stock e faturamento, eliminando processos manuais.
+              </p>
+              <a href="/astrotek" className={`inline-flex items-center justify-center px-6 py-3 w-max border border-white/15 hover:bg-white/5 active:bg-white/5 active:scale-95 text-white font-medium rounded-xl transition-all duration-300 ${focusRing}`}>
+                Ver Caso de Estudo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 /* ─── Products ───────────────────────────────────────── */
 const solutionCards = [
   {
@@ -1436,7 +1486,21 @@ const FAQ = () => {
 };
 
 /* ─── CTA ────────────────────────────────────────────── */
-const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
+export const CTA = ({ 
+  onOpenModal,
+  shadowColor = 'rgba(5, 102, 141, 0.7)',
+  gradientFrom = 'from-blue-600/50',
+  gradientTo = 'to-blue-400/50',
+  title = 'A tua equipa merece trabalhar menos no que não importa',
+  description = 'Marca uma call gratuita e mostramos-te exatamente onde a automação pode transformar o teu negócio — sem compromisso, sem complicações.'
+}: { 
+  onOpenModal: () => void;
+  shadowColor?: string;
+  gradientFrom?: string;
+  gradientTo?: string;
+  title?: string;
+  description?: string;
+}) => {
   const { ref, inView } = useInView();
   return (
     <section className="py-24 px-6 bg-surface/30" ref={ref}>
@@ -1445,7 +1509,7 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
         <div className="absolute inset-0 z-0 pointer-events-none opacity-60 flex items-center justify-center" aria-hidden="true">
           <div className="w-[300%] h-[200%] md:w-full md:h-full flex-shrink-0">
             <EtherealShadow
-              color="rgba(5, 102, 141, 0.7)"
+              color={shadowColor}
               animation={{ scale: 100, speed: 60 }}
               noise={{ opacity: 0.6, scale: 1.5 }}
             />
@@ -1453,13 +1517,13 @@ const CTA = ({ onOpenModal }: { onOpenModal: () => void }) => {
         </div>
         <div className={`relative z-10 px-6 py-16 md:p-24 text-center ${inView ? 'reveal-up' : 'opacity-0'}`}>
           <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6 leading-tight max-w-2xl mx-auto">
-            A tua equipa merece trabalhar menos no que não importa
+            {title}
           </h2>
           <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto leading-relaxed">
-            Marca uma call gratuita e mostramos-te exatamente onde a automação pode transformar o teu negócio — sem compromisso, sem complicações.
+            {description}
           </p>
           <div className="relative group inline-flex justify-center mt-4">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-blue-400/50 rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500" aria-hidden="true"></div>
+            <div className={`absolute -inset-1 bg-gradient-to-r ${gradientFrom} ${gradientTo} rounded-xl blur opacity-25 group-hover:opacity-60 transition duration-500`} aria-hidden="true"></div>
             <button
               onClick={onOpenModal}
               className={`relative px-8 py-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl transition-all duration-300 text-lg cursor-pointer border border-transparent ${focusRing}`}
@@ -1607,6 +1671,7 @@ export default function App() {
         <BeforeAfter />
         <Testimonials />
         <About onOpenUnderConstruction={() => setIsUnderConstructionOpen(true)} />
+        <Portfolio />
         <Products />
         <Process />
         <Statistics />

@@ -1365,11 +1365,11 @@ const Process = () => {
 
 /* ─── FAQ ────────────────────────────────────────────── */
 const faqs = [
-  { q: 'Quanto tempo demora a implementação?', a: 'Entre 1 a 4 semanas, dependendo da complexidade. Automações simples ficam prontas em poucos dias.' },
-  { q: 'A RadMate integra-se às nossas ferramentas existentes?', a: 'Sim. Trabalhamos com CRMs, ERPs, e-mail marketing, redes sociais e muito mais. Adaptamo-nos ao teu stack, não o contrário.' },
-  { q: 'A RadMate consegue acompanhar o crescimento da empresa?', a: 'Sempre. As nossas soluções são construídas para escalar — mais volume, mais processos, sem precisar de contratar mais ninguém.' },
-  { q: 'Que tipo de suporte está disponível após o lançamento?', a: 'Suporte contínuo com monitorização, ajustes e formação para a tua equipa tirar o máximo das automações.' },
-  { q: 'A RadMate é segura e competente?', a: 'Sim. Seguimos as normas RGPD, usamos integrações testadas e entregamos resultados reais — não promessas.' },
+  { q: 'Os dados dos meus doentes estão protegidos?', a: 'Sim. O RadMate foi desenvolvido em conformidade com o RGPD e com as normas de proteção de dados clínicos. Os teus relatórios e áudios são armazenados de forma encriptada e nunca são partilhados com terceiros.' },
+  { q: 'O RadMate funciona com a terminologia radiológica específica da minha área?', a: 'Sim. Para além do reconhecimento nativo de terminologia clínica, podes criar o teu próprio vocabulário personalizado — defines os teus atalhos e o RadMate adapta-se exatamente à forma como trabalhas.' },
+  { q: 'Preciso de alterar os meus templates de relatório atuais?', a: 'Não. O RadMate adapta-se aos teus templates existentes. Importas o formato que já usas e o software gera os relatórios dentro dessa estrutura, sem alterares o teu fluxo de trabalho habitual.' },
+  { q: 'O que acontece se a transcrição não ficar correta?', a: 'Podes rever e editar a transcrição antes de gerar o relatório. Para além disso, a etapa de verificação de consistência compara automaticamente o relatório com o áudio original e sinaliza qualquer discrepância antes de exportares.' },
+  { q: 'Quanto tempo demora a começar a usar o RadMate?', a: 'Menos de um dia. Depois de criares a tua conta, configuras o teu vocabulário e importas os teus templates — e estás pronto a gerar o teu primeiro relatório. Não precisas de formação técnica nem de suporte especializado para começar.' },
 ];
 
 const FAQ = () => {
@@ -1384,21 +1384,18 @@ const FAQ = () => {
     <section id="faq" className="py-24 px-6 bg-surface/30" ref={ref}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16">
         <div className={`lg:col-span-5 ${inView ? 'reveal-up' : 'opacity-0'}`}>
-          <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">FAQs</p>
+          <p className="text-[#06658d] font-medium text-sm tracking-wide uppercase mb-3">FAQs</p>
           <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">Perguntas Frequentes</h2>
           <p className="text-text-muted text-lg mb-10 leading-relaxed">
-            Tens dúvidas sobre como a IA pode transformar o teu negócio? Encontre as respostas abaixo ou contacta-nos diretamente.
+            Tudo o que precisas de saber antes de começares.
           </p>
-          <button className={`px-6 py-2.5 border border-border hover:bg-black/5 text-text-main rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}>
-            Faz a tua Pergunta
-          </button>
         </div>
 
         <div className="lg:col-span-7 flex flex-col gap-4" role="list">
           {faqs.map((faq, i) => (
             <div
               key={i}
-              className={`rounded-2xl bg-surface border border-border hover:border-border transition-colors duration-200 overflow-hidden ${inView ? 'reveal-up' : 'opacity-0'}`}
+              className={`rounded-2xl bg-surface border border-border hover:border-[#b3cedd]/30 transition-colors duration-200 overflow-hidden ${inView ? 'reveal-up' : 'opacity-0'}`}
               style={{ animationDelay: `${i * 100 + 200}ms` }}
               role="listitem"
             >
@@ -1410,7 +1407,7 @@ const FAQ = () => {
                 id={`faq-question-${i}`}
               >
                 <span className="text-lg font-medium pr-4">{faq.q}</span>
-                <div className={`w-8 h-8 rounded-full bg-black/5 flex items-center justify-center transition-transform duration-300 flex-shrink-0 ${openIndex === i ? 'rotate-180' : ''}`} aria-hidden="true">
+                <div className={`w-8 h-8 rounded-full bg-black/5 flex items-center justify-center transition-transform duration-300 flex-shrink-0 text-[#06658d] ${openIndex === i ? 'rotate-180' : ''}`} aria-hidden="true">
                   <ChevronDown className="w-4 h-4" />
                 </div>
               </button>
@@ -1634,6 +1631,7 @@ const VisualDemo = () => {
 const Pricing = () => {
   const { ref, inView } = useInView();
   const plans = [
+    { name: 'Free', price: '€0', desc: 'Experimenta o RadMate', features: ['10 relatórios gratuitos', 'Suporte básico', 'Templates standards'] },
     { name: 'Base', price: '€299', desc: 'Para pequenas equipas', features: ['Até 5 utilizadores', 'Suporte email', 'Funcionalidades base'] },
     { name: 'Pro', price: '€599', desc: 'O mais escolhido', features: ['Até 20 utilizadores', 'Suporte prioritário', 'Automações avançadas', 'Integrações custom'], popular: true },
     { name: 'Enterprise', price: 'Sob consulta', desc: 'Para escalar rápido', features: ['Utilizadores ilimitados', 'Suporte 24/7', 'Infraestrutura dedicada', 'SLA garantido'] }
@@ -1651,7 +1649,7 @@ const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center max-w-7xl mx-auto">
           {plans.map((plan, i) => (
             <div key={i} className={`relative p-8 rounded-3xl bg-surface border ${plan.popular ? 'border-primary shadow-xl scale-105 z-10' : 'border-border'} flex flex-col ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150}ms` }}>
               {plan.popular && (
