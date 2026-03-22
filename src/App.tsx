@@ -57,6 +57,7 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   const navLinks = [
     { label: 'Serviços', href: '/#cases' },
     { label: 'Processo', href: '/#process' },
+    { label: 'Portfólio', href: '/#portfolio' },
     { label: 'Testemunhos', href: '/#testimonials' },
     { label: 'Contacto', href: '/contactos' },
   ];
@@ -64,7 +65,7 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
   useEffect(() => {
     if (window.location.pathname !== '/') return;
 
-    const navSectionIds = ['cases', 'process', 'testimonials'];
+    const navSectionIds = ['cases', 'process', 'portfolio', 'testimonials'];
 
     const handleScroll = () => {
       let current = '';
@@ -892,7 +893,7 @@ const Portfolio = () => {
           {/* DonaBarba Card */}
           <div className={`group relative flex flex-col overflow-hidden rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '100ms' }}>
             <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/5">
-              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+DonaBarba+Screenshot" alt="DonaBarba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+              <img src="/images/DonaBarbaHero.webp" alt="DonaBarba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
             </div>
             <div className="p-8 flex flex-col flex-1">
               <h3 className="text-2xl font-display font-semibold mb-3">DonaBarba</h3>
@@ -908,7 +909,7 @@ const Portfolio = () => {
           {/* Astrotek Card */}
           <div className={`group relative flex flex-col overflow-hidden rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '200ms' }}>
             <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/5">
-              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+Astrotek+Screenshot" alt="Software Gestão Astrotek" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+              <img src="/images/AstroTekHero.webp" alt="Software Gestão Astrotek" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
             </div>
             <div className="p-8 flex flex-col flex-1">
               <h3 className="text-2xl font-display font-semibold mb-3">Software Gestão Astrotek</h3>

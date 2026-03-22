@@ -120,6 +120,19 @@ button {
   animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.card-animate {
+  opacity: 1;
+}
+
+@media (min-width: 1024px) {
+  .card-animate {
+    opacity: 0;
+  }
+  .card-animate.is-visible {
+    animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
 .reveal-fade {
   opacity: 0;
   animation: revealFade 0.55s ease forwards;

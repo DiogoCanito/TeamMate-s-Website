@@ -77,7 +77,7 @@ export default function Astrotek() {
             </div>
             
             <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden animate-slide-up-fade lg:ml-8" style={{ animationDelay: '300ms' }}>
-              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+Astrotek+Screenshot" alt="Software Astrotek" className="w-full h-full object-cover border border-white/5 rounded-3xl" />
+              <img src="/images/AstroTekHero.webp" alt="Software Astrotek" className="w-full h-full object-cover border border-white/5 rounded-3xl" />
             </div>
           </div>
         </section>
@@ -113,7 +113,7 @@ export default function Astrotek() {
         {/* SECÇÃO 4 — O DESAFIO */}
         <section className="py-24 px-6 relative" ref={challengeRef}>
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <div className={`sticky top-32 ${challengeInView ? 'reveal-up' : 'opacity-0'}`}>
+            <div className={`lg:sticky lg:top-32 card-animate ${challengeInView ? 'is-visible' : ''}`}>
               <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">O DESAFIO</p>
               <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">
                 Gerir um negócio de reparações sem ferramentas certas é caos
@@ -128,7 +128,7 @@ export default function Astrotek() {
                 { icon: Package, title: "Stock Sem Controlo", desc: "Gestão de peças e equipamentos feita manualmente, com erros e perdas frequentes." },
                 { icon: Bell, title: "Comunicação Ineficiente", desc: "Clientes sem atualizações sobre o estado das reparações, gerando contactos desnecessários e insatisfação." }
               ].map((card, i) => (
-                <div key={i} className={`bg-[#0f1117] border border-border p-8 rounded-[2rem] hover:border-white/20 transition-colors ${challengeInView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150 + 200}ms` }}>
+                <div key={i} className={`bg-[#0f1117] border border-border p-8 rounded-[2rem] hover:border-white/20 transition-colors card-animate ${challengeInView ? 'is-visible' : ''}`} style={{ animationDelay: `${i * 150 + 200}ms` }}>
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                     <card.icon className="w-7 h-7 text-primary" />
                   </div>

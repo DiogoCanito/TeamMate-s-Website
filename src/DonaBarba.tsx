@@ -50,7 +50,6 @@ export default function DonaBarba() {
           
           <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center z-10">
             <div className="flex flex-col items-start animate-slide-up-fade" style={{ animationDelay: '100ms' }}>
-              <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">CASO DE ESTUDO</p>
               <h1 className="text-4xl md:text-5xl lg:text-[4rem] font-display font-medium tracking-tight leading-[1] mb-6">
                 Como a <span className="text-primary">DonaBarba</span> passou a gerir toda a barbearia a partir de um único sistema
               </h1>
@@ -75,7 +74,7 @@ export default function DonaBarba() {
             </div>
             
             <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden animate-slide-up-fade lg:ml-8" style={{ animationDelay: '300ms' }}>
-              <img src="https://via.placeholder.com/800x600/111111/333333?text=Software+DonaBarba+Screenshot" alt="Software DonaBarba" className="w-full h-full object-cover border border-white/5 rounded-3xl" />
+              <img src="/images/DonaBarbaHero.webp" alt="Software DonaBarba" className="w-full h-full object-cover border border-white/5 rounded-3xl" />
             </div>
           </div>
         </section>
@@ -111,7 +110,7 @@ export default function DonaBarba() {
         {/* SECÇÃO 4 — O DESAFIO */}
         <section className="py-24 px-6 relative" ref={challengeRef}>
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <div className={`sticky top-32 ${challengeInView ? 'reveal-up' : 'opacity-0'}`}>
+            <div className={`lg:sticky lg:top-32 card-animate ${challengeInView ? 'is-visible' : ''}`}>
               <p className="text-primary font-medium text-sm tracking-wide uppercase mb-3">O DESAFIO</p>
               <h2 className="text-4xl md:text-5xl font-display font-semibold mb-6 leading-tight">
                 Gerir uma barbearia com vários barbeiros sem um sistema é insustentável
@@ -126,7 +125,7 @@ export default function DonaBarba() {
                 { icon: BarChart3, title: "Sem Visibilidade do Negócio", desc: "Impossível saber a faturação real, taxa de ocupação ou desempenho individual de cada barbeiro." },
                 { icon: Package, title: "Stock Descontrolado", desc: "Produtos em falta sem aviso prévio, sem controlo de inventário e sem alertas de reposição." }
               ].map((card, i) => (
-                <div key={i} className={`bg-[#0f1117] border border-border p-8 rounded-[2rem] hover:border-white/20 transition-colors ${challengeInView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: `${i * 150 + 200}ms` }}>
+                <div key={i} className={`bg-[#0f1117] border border-border p-8 rounded-[2rem] hover:border-white/20 transition-colors card-animate ${challengeInView ? 'is-visible' : ''}`} style={{ animationDelay: `${i * 150 + 200}ms` }}>
                   <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                     <card.icon className="w-7 h-7 text-primary" />
                   </div>
