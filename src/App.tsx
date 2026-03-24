@@ -893,7 +893,7 @@ const Portfolio = () => {
           {/* DonaBarba Card */}
           <div className={`group relative flex flex-col overflow-hidden rounded-3xl bg-surface border border-border hover:border-white/20 transition-all duration-300 ${inView ? 'reveal-up' : 'opacity-0'}`} style={{ animationDelay: '100ms' }}>
             <div className="aspect-[4/3] w-full overflow-hidden border-b border-white/5">
-              <img src="/images/DonaBarbaHero.webp" alt="DonaBarba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+              <img src="/images/DonaBarbaCaseStudie.webp" alt="DonaBarba" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
             </div>
             <div className="p-8 flex flex-col flex-1">
               <h3 className="text-2xl font-display font-semibold mb-3">DonaBarba</h3>

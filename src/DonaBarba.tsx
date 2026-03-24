@@ -48,8 +48,8 @@ export default function DonaBarba() {
             </div>
           </div>
           
-          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center z-10">
-            <div className="flex flex-col items-start animate-slide-up-fade" style={{ animationDelay: '100ms' }}>
+          <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center lg:items-stretch lg:min-h-[60vh] z-10">
+            <div className="flex flex-col items-start justify-center animate-slide-up-fade" style={{ animationDelay: '100ms' }}>
               <h1 className="text-4xl md:text-5xl lg:text-[4rem] font-display font-medium tracking-tight leading-[1] mb-6">
                 Como a <span className="text-primary">DonaBarba</span> passou a gerir toda a barbearia a partir de um único sistema
               </h1>
@@ -73,8 +73,9 @@ export default function DonaBarba() {
               </div>
             </div>
             
-            <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden animate-slide-up-fade lg:ml-8" style={{ animationDelay: '300ms' }}>
-              <img src="/images/DonaBarbaHero.webp" alt="Software DonaBarba" className="w-full h-full object-cover border border-white/5 rounded-3xl" />
+            <div className="relative w-full aspect-[4/3] lg:aspect-auto lg:h-full animate-slide-up-fade" style={{ animationDelay: '300ms' }}>
+              <img src="/images/DonaBarbaHeroBig.webp" alt="Software DonaBarba Big" className="absolute bottom-0 right-0 w-[85%] h-auto border border-white/5 rounded-2xl shadow-2xl z-10 donabarba-float-reverse" />
+              <img src="/images/DonaBarbaHeroSmall.webp" alt="Software DonaBarba Small" className="absolute top-0 left-0 w-[50%] h-auto border border-white/5 rounded-2xl shadow-2xl z-20 donabarba-float" />
             </div>
           </div>
         </section>
