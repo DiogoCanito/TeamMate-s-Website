@@ -50,7 +50,7 @@ function useInView(threshold = 0.15) {
 }
 
 /* ─── Navbar ─────────────────────────────────────────── */
-export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
+export const Navbar = ({ onOpenModal, hideNavLinks, ctaText = 'Agendar Conversa' }: { onOpenModal: () => void, hideNavLinks?: boolean, ctaText?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
@@ -123,24 +123,26 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
             </a>
 
             {/* Desktop nav links — centred */}
-            <ul className="hidden md:flex items-center gap-8" role="list">
-              {navLinks.map((link) => {
-                const targetId = link.href.startsWith('/#') ? link.href.substring(2) : '';
-                const isActive = activeSection === targetId && targetId !== '';
+            {!hideNavLinks && (
+              <ul className="hidden md:flex items-center gap-8" role="list">
+                {navLinks.map((link) => {
+                  const targetId = link.href.startsWith('/#') ? link.href.substring(2) : '';
+                  const isActive = activeSection === targetId && targetId !== '';
 
-                return (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => handleNav(e, link.href)}
-                      className={`text-base font-display font-medium transition-colors duration-200 cursor-pointer ${focusRing} rounded ${isActive ? 'text-primary' : 'text-gray-400 hover:text-white'}`}
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
+                  return (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleNav(e, link.href)}
+                        className={`text-base font-display font-medium transition-colors duration-200 cursor-pointer ${focusRing} rounded ${isActive ? 'text-primary' : 'text-gray-400 hover:text-white'}`}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center">
@@ -150,7 +152,7 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
                   onClick={onOpenModal}
                   className={`relative px-5 py-2.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
                 >
-                  Agendar Conversa
+                  {ctaText}
                 </button>
               </div>
             </div>
@@ -199,7 +201,7 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
           role="menu"
         >
           {/* Mobile nav links */}
-          {navLinks.map((link) => (
+          {!hideNavLinks && navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -217,7 +219,7 @@ export const Navbar = ({ onOpenModal }: { onOpenModal: () => void }) => {
               className={`relative w-full px-5 py-3.5 text-sm font-medium text-white bg-primary hover:bg-primary-hover rounded-xl transition-all duration-300 cursor-pointer ${focusRing}`}
               onClick={() => { setIsOpen(false); onOpenModal(); }}
             >
-              Agendar Conversa
+              {ctaText}
             </button>
           </div>
         </div>

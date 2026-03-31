@@ -9,6 +9,7 @@ import { Navbar, Footer } from './App';
 import { UnderConstructionModal } from './components/UnderConstructionModal';
 import { LeadModal } from './components/LeadModal';
 import { EtherealShadow } from './components/ui/etheral-shadow';
+import { supabase } from './lib/supabase';
 
 /* ─── Focus style helper ─────────────────────────────── */
 const focusRing = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background';
@@ -86,7 +87,7 @@ const AuditoriaHero = ({ onScrollToForm }: { onScrollToForm: () => void }) => {
           style={{ animationDelay: '280ms' }}
         >
           Fazemos uma auditoria gratuita ao teu negócio e dizemos-te exatamente onde a IA pode poupar tempo, reduzir custos e fazer a tua equipa trabalhar melhor.{' '}
-          <span className="text-gray-300 font-medium">Sem jargão. Sem compromisso.</span>
+          <span className="text-gray-300 font-medium">Sem compromisso.</span>
         </p>
 
         {/* CTA Button */}
@@ -112,7 +113,7 @@ const AuditoriaHero = ({ onScrollToForm }: { onScrollToForm: () => void }) => {
             </button>
           </div>
           {/* Trust signal */}
-          <p className="text-xs text-gray-500 tracking-wide">
+          <p className="text-xs font-display text-gray-500 tracking-wide">
             Gratuito &nbsp;·&nbsp; Sem compromisso &nbsp;·&nbsp; Resposta em 24h
           </p>
         </div>
@@ -214,7 +215,7 @@ const Solucao = () => {
             O que é a Auditoria Gratuita de IA?
           </h2>
           <p className="text-gray-400 text-lg leading-relaxed max-w-2xl mx-auto">
-            Em 30 a 45 minutos, analisamos o teu negócio contigo e identificamos os processos que mais beneficiariam de automação com IA. No final, tens um mapa claro do que pode ser feito, quanto tempo isso pouparia e se faz sentido avançar.
+            Em 20 a 30 minutos, analisamos o teu negócio contigo e identificamos os processos que mais beneficiariam de automação com IA. No final, tens um mapa claro do que pode ser feito, quanto tempo isso pouparia e se faz sentido avançar.
           </p>
         </div>
 
@@ -265,7 +266,7 @@ const steps = [
   },
   {
     num: 3,
-    title: 'Sessão de 30 a 45 minutos',
+    title: 'Sessão de 20 a 30 minutos',
     desc: 'Uma conversa por videochamada onde mapeamos os teus processos e identificamos oportunidades.',
   },
   {
@@ -419,7 +420,7 @@ const auditoriaFaqs = [
   },
   {
     q: 'Quanto tempo demora a sessão?',
-    a: 'Entre 30 a 45 minutos por videochamada. Pedimos que venhas com uma ideia dos processos que mais te consomem tempo.',
+    a: 'Entre 20 a 30 minutos por videochamada. Pedimos que venhas com uma ideia dos processos que mais te consomem tempo.',
   },
   {
     q: 'Precisamos de já usar ferramentas de IA?',
@@ -522,14 +523,17 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
     setSubmitStatus('idle');
 
     try {
-      // Simulate API call — replace with actual Supabase insert if needed
-      await new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('timeout')), 6000);
-        setTimeout(() => {
-          clearTimeout(timeout);
-          resolve();
-        }, 1200);
-      });
+      const { error } = await supabase
+        .from('auditoria')
+        .insert([{
+          nome: formData.nome,
+          email: formData.email,
+          empresa: formData.empresa,
+          cargo: formData.cargo,
+          desafio: formData.desafio
+        }]);
+
+      if (error) throw error;
 
       setSubmitStatus('success');
       setShowConfirm(true);
@@ -580,7 +584,7 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
           <form className="flex flex-col gap-5" onSubmit={handleSubmit} noValidate>
             {/* Nome */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-display font-medium text-gray-300">
                 Nome completo <span style={{ color: coral }}>*</span>
               </label>
               <input
@@ -599,7 +603,7 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
 
             {/* Email */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-display font-medium text-gray-300">
                 Email profissional <span style={{ color: coral }}>*</span>
               </label>
               <input
@@ -617,7 +621,7 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
 
             {/* Empresa */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-display font-medium text-gray-300">
                 Nome da empresa <span style={{ color: coral }}>*</span>
               </label>
               <input
@@ -635,7 +639,7 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
 
             {/* Cargo */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-display font-medium text-gray-300">
                 Cargo <span style={{ color: coral }}>*</span>
               </label>
               <input
@@ -653,7 +657,7 @@ const AuditoriaForm = React.forwardRef<HTMLElement>((_, ref) => {
 
             {/* Desafio */}
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-gray-300">
+              <label className="text-sm font-display font-medium text-gray-300">
                 Qual é o maior desafio operacional da tua empresa?{' '}
                 <span className="text-gray-500 font-normal">(opcional)</span>
               </label>
@@ -821,7 +825,7 @@ const Auditoria = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-primary/30 overflow-x-hidden">
-      <Navbar onOpenModal={() => setIsModalOpen(true)} />
+      <Navbar onOpenModal={scrollToForm} hideNavLinks ctaText="Agendar Auditoria" />
 
       <main>
         <AuditoriaHero onScrollToForm={scrollToForm} />
